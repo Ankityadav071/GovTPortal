@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Results — GovTPortal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/result.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<nav class="navbar" id="main-nav">
+  <a href="index.html" class="navbar__logo">
+    <div class="navbar__logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="navbar__brand">Govt<span>Portal</span></span>
+  </a>
+  <nav class="navbar__links">
+    <a href="index.html" class="navbar__link">Home</a>
+    <a href="ai-tools.html" class="navbar__link">AI Tools</a>
+  </nav>
+  <div class="navbar__actions">
+    <a href="exam-setup.html" class="btn btn-primary btn-sm">New Exam →</a>
+  </div>
+</nav>
+
+<main class="result-page">
+  <div class="result-container">
+
+    <!-- Header -->
+    <div class="result-header">
+      <div class="result-header__left">
+        <h1 class="result-header__title" id="result-title">Exam Results</h1>
+        <div class="result-header__sub" id="result-sub">Loading...</div>
+      </div>
+      <div class="result-header__actions">
+        <button class="btn btn-secondary" onclick="ResultPage.exportPDF()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Export PDF
+        </button>
+        <a href="exam-lobby.html" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Reattempt
+        </a>
+        <a href="index.html" class="btn btn-ghost">Home</a>
+      </div>
+    </div>
+
+    <!-- Score Hero -->
+    <div class="score-hero">
+      <div class="score-hero__grade-ring">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="10"/>
+          <circle id="score-ring" cx="60" cy="60" r="50" fill="none"
+            stroke="var(--c-primary)" stroke-width="10"
+            stroke-linecap="round"
+            stroke-dasharray="314.16"
+            stroke-dashoffset="314.16"
+            transform="rotate(-90 60 60)"/>
+        </svg>
+        <div class="score-hero__grade-label">
+          <div class="score-hero__grade" id="score-pct">0%</div>
+          <div class="score-hero__grade-text">Score</div>
+        </div>
+      </div>
+
+      <div class="score-hero__stats">
+        <div class="score-hero__main" id="score-marks">— / —</div>
+        <div class="score-hero__sub" id="score-title">Practice Exam</div>
+        <div class="score-hero__meta">
+          <div class="result-meta-item">
+            <div class="result-meta-item__label">Time Taken</div>
+            <div class="result-meta-item__val" id="hero-time">—</div>
+          </div>
+          <div class="result-meta-item">
+            <div class="result-meta-item__label">Accuracy</div>
+            <div class="result-meta-item__val" id="hero-accuracy">—</div>
+          </div>
+          <div class="result-meta-item">
+            <div class="result-meta-item__label">Attempt Rate</div>
+            <div class="result-meta-item__val" id="hero-attempt">—</div>
+          </div>
+          <div class="result-meta-item">
+            <div class="result-meta-item__label">Candidate</div>
+            <div class="result-meta-item__val" id="hero-candidate">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="score-hero__right">
+        <div class="grade-badge" id="grade-badge">—</div>
+        <div class="grade-message" id="grade-message">—</div>
+      </div>
+    </div>
+
+    <!-- 4 Stat Cards -->
+    <div class="result-stats-row">
+      <div class="result-stat-card correct">
+        <div class="result-stat-card__label">Correct</div>
+        <div class="result-stat-card__value correct-val" id="stat-correct">—</div>
+        <div class="result-stat-card__sub" id="stat-correct-marks">—</div>
+      </div>
+      <div class="result-stat-card wrong">
+        <div class="result-stat-card__label">Wrong</div>
+        <div class="result-stat-card__value wrong-val" id="stat-wrong">—</div>
+        <div class="result-stat-card__sub" id="stat-wrong-marks">—</div>
+      </div>
+      <div class="result-stat-card skipped">
+        <div class="result-stat-card__label">Skipped</div>
+        <div class="result-stat-card__value" id="stat-skipped">—</div>
+        <div class="result-stat-card__sub">Not attempted</div>
+      </div>
+      <div class="result-stat-card time">
+        <div class="result-stat-card__label">Avg Time/Q</div>
+        <div class="result-stat-card__value time-val" id="stat-avg-time">—</div>
+        <div class="result-stat-card__sub">seconds per question</div>
+      </div>
+    </div>
+
+    <!-- Analytics Grid -->
+    <div class="result-analytics-grid">
+      <!-- Donut chart -->
+      <div class="chart-card">
+        <div class="chart-card__title">Answer Distribution</div>
+        <div class="chart-canvas-wrap">
+          <canvas id="donut-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Section bars -->
+      <div class="chart-card">
+        <div class="chart-card__title">Section-wise Performance</div>
+        <div class="section-bars" id="section-bars"></div>
+      </div>
+
+      <!-- Bar chart -->
+      <div class="chart-card">
+        <div class="chart-card__title">Score Breakdown by Section</div>
+        <canvas id="bar-chart" class="result-chart"></canvas>
+      </div>
+
+      <!-- Time heatmap -->
+      <div class="chart-card">
+        <div class="chart-card__title">Time Per Question Heatmap</div>
+        <p style="font-size:var(--ts-xs);color:var(--c-text-tertiary);margin-bottom:var(--sp-3)">Darker = more time spent</p>
+        <div class="time-heatmap" id="time-heatmap"></div>
+      </div>
+    </div>
+
+    <!-- Question Review Table -->
+    <div class="q-table-section">
+      <div class="q-table-header">
+        <h2 style="font-size:var(--ts-xl);font-weight:800">Question Review</h2>
+        <div class="q-table-filters">
+          <button class="filter-btn active" data-filter="all" onclick="ResultPage.filterTable('all',this)">All</button>
+          <button class="filter-btn" data-filter="correct" onclick="ResultPage.filterTable('correct',this)">✅ Correct</button>
+          <button class="filter-btn" data-filter="wrong" onclick="ResultPage.filterTable('wrong',this)">❌ Wrong</button>
+          <button class="filter-btn" data-filter="skipped" onclick="ResultPage.filterTable('skipped',this)">⬜ Skipped</button>
+        </div>
+      </div>
+      <div class="q-table-wrap">
+        <div class="q-table-scroll">
+          <table class="table" id="q-review-table">
+            <thead>
+              <tr>
+                <th style="width:50px">#</th>
+                <th>Question</th>
+                <th style="width:80px">Your Ans</th>
+                <th style="width:80px">Correct</th>
+                <th style="width:70px">Time</th>
+                <th style="width:70px">Marks</th>
+                <th style="width:40px"></th>
+              </tr>
+            </thead>
+            <tbody id="q-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weak Areas -->
+    <div class="weak-areas-section" id="weak-areas-section" style="display:none">
+      <h2 style="font-size:var(--ts-xl);font-weight:800;margin-bottom:var(--sp-5)">Weak Areas</h2>
+      <div class="weak-areas-grid" id="weak-areas-grid"></div>
+    </div>
+
+    <!-- Recommendations -->
+    <div class="recommendations-card" id="recs-card">
+      <div class="recommendations-card__title">💡 Improvement Recommendations</div>
+      <div class="rec-list" id="rec-list"></div>
+    </div>
+
+  </div>
+</main>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/core/store.js"></script>
+<script src="js/core/utils.js"></script>
+<script src="js/features/analytics.js"></script>
+<script src="js/features/pdf-export.js"></script>
+<script>
+window.ResultPage = (function() {
+  const result = Store.getResult();
+  const cfg    = Store.getConfig();
+
+  if (!result) {
+    toast('No result found. Please complete an exam first.', 'warn');
+    setTimeout(() => window.location.href = 'index.html', 2500);
+    return {};
+  }
+
+  initNavbarScroll();
+
+  const { score, totalMarks, percentage, correct, wrong, skipped,
+          timeTaken, accuracy, attemptRate, grade, gradeMessage,
+          sections, qTimes, recommendations, weakAreas } = result;
+
+  // ── HEADER ──
+  document.getElementById('result-title').textContent = cfg.examTitle || 'Practice Exam';
+  document.getElementById('result-sub').textContent   =
+    `Submitted on ${new Date(result.endTime).toLocaleString('en-IN')}`;
+  document.getElementById('score-title').textContent    = cfg.examTitle;
+  document.getElementById('score-marks').textContent    = `${score} / ${totalMarks}`;
+  document.getElementById('score-pct').textContent      = percentage + '%';
+  document.getElementById('hero-time').textContent      = formatTime(timeTaken);
+  document.getElementById('hero-accuracy').textContent  = accuracy + '%';
+  document.getElementById('hero-attempt').textContent   = attemptRate + '%';
+  document.getElementById('hero-candidate').textContent = cfg.candidateName || 'Candidate';
+
+  document.getElementById('grade-badge').textContent  = grade;
+  document.getElementById('grade-message').textContent = gradeMessage;
+
+  // Grade badge colour
+  const gradeColors = { 'A+':'var(--c-success)','A':'var(--c-success)','B+':'var(--c-info)','B':'var(--c-info)','C':'var(--c-warn)','D':'var(--c-danger)','F':'var(--c-danger)' };
+  document.getElementById('grade-badge').style.background = (gradeColors[grade] || 'var(--c-primary)') + '33';
+  document.getElementById('grade-badge').style.borderColor = gradeColors[grade] || 'var(--c-primary)';
+  document.getElementById('grade-badge').style.color = gradeColors[grade] || 'var(--c-primary)';
+
+  // Animate ring
+  setTimeout(() => {
+    const ring = document.getElementById('score-ring');
+    const circ = 314.16;
+    const offset = circ - (circ * percentage / 100);
+    ring.style.transition = 'stroke-dashoffset 1.5s cubic-bezier(.4,2,.6,1)';
+    ring.style.strokeDashoffset = offset;
+    if (percentage >= 60) ring.style.stroke = 'var(--c-success)';
+    else if (percentage >= 40) ring.style.stroke = 'var(--c-warn)';
+    else ring.style.stroke = 'var(--c-danger)';
+  }, 200);
+
+  // Stat cards
+  document.getElementById('stat-correct').textContent      = correct;
+  document.getElementById('stat-correct-marks').textContent = `+${(correct * cfg.marksCorrect).toFixed(1)} marks`;
+  document.getElementById('stat-wrong').textContent        = wrong;
+  document.getElementById('stat-wrong-marks').textContent  = `-${(wrong * cfg.marksNegative).toFixed(1)} marks`;
+  document.getElementById('stat-skipped').textContent      = skipped;
+  document.getElementById('stat-avg-time').textContent     = result.avgQTime ? result.avgQTime.toFixed(1) + 's' : '—';
+
+  // ── DONUT ──
+  new Chart(document.getElementById('donut-chart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Correct', 'Wrong', 'Skipped'],
+      datasets: [{
+        data: [correct, wrong, skipped],
+        backgroundColor: ['#22c96e','#e03e3e','#4a5568'],
+        borderWidth: 0,
+        hoverOffset: 8,
+      }],
+    },
+    options: {
+      cutout: '68%',
+      plugins: { legend: { position: 'bottom', labels: { color:'#9ba3b8', font:{ family:'Inter' } } } },
+    },
+  });
+
+  // ── SECTION BARS ──
+  const barsEl = document.getElementById('section-bars');
+  sections.forEach(s => {
+    const pct = s.total ? Math.round(s.correct / s.total * 100) : 0;
+    const cls = pct >= 60 ? 'good' : pct >= 40 ? 'avg' : 'bad';
+    const barColor = pct >= 60 ? 'var(--c-success)' : pct >= 40 ? 'var(--c-warn)' : 'var(--c-danger)';
+    barsEl.innerHTML += `
+      <div class="section-bar">
+        <div class="section-bar__header">
+          <span class="section-bar__name">${s.name}</span>
+          <span class="section-bar__pct ${cls}">${pct}% (${s.correct}/${s.total})</span>
+        </div>
+        <div class="progress-bar"><div class="progress-bar__fill" style="width:${pct}%;background:${barColor}"></div></div>
+      </div>`;
+  });
+
+  // ── BAR CHART ──
+  new Chart(document.getElementById('bar-chart'), {
+    type: 'bar',
+    data: {
+      labels: sections.map(s => s.name),
+      datasets: [
+        { label: 'Correct', data: sections.map(s => s.correct), backgroundColor:'#22c96e88', borderColor:'#22c96e', borderWidth:2, borderRadius:4 },
+        { label: 'Wrong',   data: sections.map(s => s.wrong),   backgroundColor:'#e03e3e88', borderColor:'#e03e3e', borderWidth:2, borderRadius:4 },
+        { label: 'Skipped', data: sections.map(s => s.skipped), backgroundColor:'#4a556888', borderColor:'#4a5568', borderWidth:2, borderRadius:4 },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ color:'#9ba3b8' } },
+        y: { grid:{ color:'rgba(255,255,255,0.04)' }, ticks:{ color:'#9ba3b8', stepSize:1 } },
+      },
+      plugins: { legend:{ labels:{ color:'#9ba3b8', font:{ family:'Inter' } } } },
+    },
+  });
+
+  // ── TIME HEATMAP ──
+  const heatmap  = document.getElementById('time-heatmap');
+  const maxTime  = Math.max(...Object.values(qTimes || {}), 30);
+  const questions = Store.getQuestions();
+  questions.forEach((_, idx) => {
+    const t = (qTimes && qTimes[idx]) || 0;
+    const intensity = Math.min(t / maxTime, 1);
+    const r = Math.round(intensity * 255);
+    const b = Math.round((1 - intensity) * 60 + 20);
+    const cell = document.createElement('div');
+    cell.className = 'heat-cell';
+    cell.style.background = `rgb(${r},${Math.round(60 - intensity*40)},${b})`;
+    cell.title = `Q${idx+1}: ${t}s`;
+    cell.setAttribute('data-idx', idx);
+    heatmap.appendChild(cell);
+  });
+
+  // ── QUESTION TABLE ──
+  let tableFilter = 'all';
+  const answers = Store.getAnswers();
+  const flags   = Store.getFlags();
+
+  function renderTable(filter) {
+    const tbody = document.getElementById('q-table-body');
+    let rows = '';
+    questions.forEach((q, idx) => {
+      const ans = answers[idx];
+      const userAns = ans ? ans.value : null;
+      const isCorrect = userAns === q.correct;
+      const isSkipped = !userAns;
+      const status = isSkipped ? 'skipped' : isCorrect ? 'correct' : 'wrong';
+      if (filter !== 'all' && filter !== status) return;
+
+      const timeTakenQ = (qTimes && qTimes[idx]) || 0;
+      const marksEarned = isSkipped ? 0 : isCorrect ? cfg.marksCorrect : -cfg.marksNegative;
+      const marksClass  = marksEarned > 0 ? 'correct-val' : marksEarned < 0 ? 'wrong-val' : '';
+
+      rows += `<tr>
+        <td style="font-family:var(--font-mono);font-size:var(--ts-xs)">${idx+1}</td>
+        <td style="font-size:var(--ts-sm);max-width:360px;white-space:normal">${q.question.length > 90 ? q.question.slice(0,90)+'…' : q.question}</td>
+        <td style="text-align:center"><span class="badge badge-${status === 'correct' ? 'success' : status === 'wrong' ? 'danger' : 'neutral'}">${userAns || '—'}</span></td>
+        <td style="text-align:center"><span class="badge badge-success">${q.correct}</span></td>
+        <td style="font-family:var(--font-mono);font-size:var(--ts-xs);text-align:center">${timeTakenQ}s</td>
+        <td style="text-align:center" class="${marksClass}">${marksEarned > 0 ? '+' : ''}${marksEarned}</td>
+        <td>
+          <button class="expand-btn" onclick="toggleExplanation(${idx})">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="7" style="padding:0;border:none">
+          <div class="q-row-explanation" id="exp-${idx}">
+            <strong>Correct Answer:</strong> (${q.correct}) ${q.options[q.correct] || ''}<br>
+            ${q.explanation ? `<strong>Explanation:</strong> ${q.explanation}` : ''}
+          </div>
+        </td>
+      </tr>`;
+    });
+    tbody.innerHTML = rows || `<tr><td colspan="7" style="text-align:center;color:var(--c-text-tertiary);padding:var(--sp-8)">No questions in this filter</td></tr>`;
+  }
+  renderTable('all');
+
+  window.toggleExplanation = function(idx) {
+    const el = document.getElementById('exp-' + idx);
+    el && el.classList.toggle('open');
+  };
+
+  // ── WEAK AREAS ──
+  if (weakAreas && weakAreas.length) {
+    document.getElementById('weak-areas-section').style.display = '';
+    const grid = document.getElementById('weak-areas-grid');
+    weakAreas.forEach(w => {
+      grid.innerHTML += `
+        <div class="weak-area-card">
+          <div class="weak-area-card__top">
+            <div class="weak-area-card__name">${w.section}</div>
+            <div class="weak-area-card__pct">${w.pct}%</div>
+          </div>
+          <div class="progress-bar"><div class="progress-bar__fill" style="width:${w.pct}%;background:var(--c-danger)"></div></div>
+          <div class="weak-area-card__hint" style="margin-top:var(--sp-3)">${w.correct}/${w.total} correct · Focus more here</div>
+        </div>`;
+    });
+  }
+
+  // ── RECOMMENDATIONS ──
+  const recList = document.getElementById('rec-list');
+  (recommendations || []).forEach(r => {
+    recList.innerHTML += `<div class="rec-item"><div class="rec-item__icon">💡</div><div>${r}</div></div>`;
+  });
+
+  return {
+    filterTable: function(filter, btn) {
+      tableFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn && btn.classList.add('active');
+      renderTable(filter);
+    },
+    exportPDF: function() {
+      if (typeof PDFExport !== 'undefined') {
+        PDFExport.generate({ result, cfg, questions, answers, flags, qTimes });
+      } else {
+        toast('PDF export loading...', 'info');
+      }
+    },
+  };
+})();
+</script>
+</body>
+</html>

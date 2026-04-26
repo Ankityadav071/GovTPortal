@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam — GovTPortal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/exam.css">
+</head>
+<body>
+<!-- EXAM NAV -->
+<div class="exam-nav">
+  <div class="exam-nav__brand">Govt<span style="color:var(--c-primary)">Portal</span></div>
+  <div class="exam-nav__title" id="exam-nav-title">Loading...</div>
+  <div class="exam-nav__actions">
+    <button class="btn btn-secondary btn-sm" id="calc-toggle-btn" style="display:none" onclick="toggleCalculator()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
+      Calculator
+    </button>
+    <button class="btn btn-danger btn-sm" onclick="openSubmitModal()">
+      Submit Exam
+    </button>
+  </div>
+</div>
+
+<!-- TWO-PANE LAYOUT -->
+<div class="exam-layout">
+
+  <!-- LEFT: QUESTION PANE -->
+  <div class="q-pane">
+    <div class="q-pane__header">
+      <div class="q-pane__num" id="q-num">Question 1 of —</div>
+      <div style="display:flex;gap:var(--sp-2)">
+        <span class="badge badge-primary" id="q-section-badge">Section</span>
+        <span class="badge badge-neutral" id="q-marks-badge">+4 / -1</span>
+        <span class="badge badge-neutral" id="q-diff-badge">Medium</span>
+      </div>
+      <div class="q-pane__marks" id="q-marks"></div>
+    </div>
+    <!-- Progress bar -->
+    <div style="padding:0 var(--sp-6) var(--sp-2);background:var(--c-bg-surface);flex-shrink:0">
+      <div style="display:flex;justify-content:space-between;font-size:var(--ts-xs);color:var(--c-text-tertiary);margin-bottom:4px">
+        <span>Progress</span><span id="q-progress-text">0 / —</span>
+      </div>
+      <div class="progress-bar"><div class="progress-bar__fill gradient" id="q-progress-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="q-pane__body">
+      <div class="q-text" id="q-text">Loading question...</div>
+      <div class="q-options" id="q-options"></div>
+    </div>
+
+    <div class="q-pane__actions">
+      <div class="q-actions-left">
+        <button class="btn btn-secondary" id="btn-prev" onclick="prevQuestion()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Previous
+        </button>
+        <button class="btn btn-warn" id="btn-mark" onclick="toggleMark()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <span id="mark-label">Mark for Review</span>
+        </button>
+        <button class="btn btn-ghost" onclick="clearAnswer()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Clear
+        </button>
+      </div>
+      <div class="q-actions-right">
+        <button class="btn btn-primary" onclick="saveAndNext()">
+          Save & Next
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="key-hints">
+      <div class="key-hint"><kbd>A</kbd><kbd>B</kbd><kbd>C</kbd><kbd>D</kbd> Select</div>
+      <div class="key-hint"><kbd>N</kbd> Next</div>
+      <div class="key-hint"><kbd>P</kbd> Previous</div>
+      <div class="key-hint"><kbd>M</kbd> Mark</div>
+      <div class="key-hint"><kbd>S</kbd> Save + Next</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: SIDEBAR -->
+  <div class="exam-sidebar">
+    <!-- Candidate strip -->
+    <div class="cand-strip">
+      <div class="cand-strip__avatar" id="cand-avatar">A</div>
+      <div>
+        <div class="cand-strip__name" id="cand-name">Candidate</div>
+        <div class="cand-strip__id" id="cand-id">ID: —</div>
+      </div>
+    </div>
+
+    <!-- Timer -->
+    <div class="timer-block">
+      <div class="timer-ring-wrap">
+        <svg viewBox="0 0 72 72">
+          <circle class="progress-ring__bg" cx="36" cy="36" r="30" stroke-width="5"/>
+          <circle class="progress-ring__fill" id="timer-ring-fill" cx="36" cy="36" r="30" stroke-width="5"
+            stroke-dasharray="188.5" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-ring-label">
+          <div class="timer-ring-time" id="timer-ring-time">00:00</div>
+          <div class="label-text">REM</div>
+        </div>
+      </div>
+      <div class="timer-info" id="timer-info">
+        <div class="timer-info__label">Time Remaining</div>
+        <div class="timer-info__val" id="timer-display">—</div>
+      </div>
+    </div>
+
+    <!-- Section tabs -->
+    <div class="section-tabs-wrap" id="section-tabs-wrap">
+      <div class="tab-group" id="section-tabs"></div>
+    </div>
+
+    <!-- Summary -->
+    <div class="q-summary-strip" id="q-summary" style="display:flex;gap:var(--sp-2)"></div>
+
+    <!-- Question grid -->
+    <div class="q-grid-wrap" id="q-grid-wrap"></div>
+
+    <!-- Submit -->
+    <div class="exam-sidebar__submit">
+      <button class="btn btn-danger w-full" onclick="openSubmitModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        Submit Exam
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMIT MODAL -->
+<div class="modal-backdrop hidden" id="submit-modal">
+  <div class="modal">
+    <div class="modal__header">
+      <div class="modal__title">Submit Exam?</div>
+      <button class="modal__close" onclick="closeModal('submit-modal')">✕</button>
+    </div>
+    <div class="modal__body">
+      <p>Are you sure you want to submit the exam?</p>
+      <br>
+      <div id="submit-summary-text" style="font-size:var(--ts-sm);color:var(--c-text-secondary)"></div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-secondary" onclick="cancelSubmit()">Review Answers</button>
+      <button class="btn btn-danger" onclick="submitExam()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- TIME'S UP MODAL -->
+<div class="modal-backdrop hidden" id="times-up-modal">
+  <div class="modal">
+    <div class="modal__header"><div class="modal__title">⏰ Time's Up!</div></div>
+    <div class="modal__body">Your exam has been auto-submitted as time has expired.</div>
+    <div class="modal__footer">
+      <button class="btn btn-primary" onclick="submitExam()">View Results</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIOLATION OVERLAY -->
+<div class="violation-overlay hidden" id="violation-overlay">
+  <div class="violation-card">
+    <div class="violation-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--c-danger-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="violation-title">Violation Detected!</div>
+    <div class="violation-msg" id="violation-msg">Tab switch detected.</div>
+    <div style="font-size:var(--ts-sm);color:var(--c-text-secondary);margin-bottom:var(--sp-5)" id="violation-count-msg"></div>
+    <div class="violation-countdown" id="violation-countdown">5</div>
+    <p style="font-size:var(--ts-xs);color:var(--c-text-tertiary);margin-top:var(--sp-3)">Resuming in...</p>
+    <button class="btn btn-danger w-full" style="margin-top:var(--sp-5)" onclick="dismissViolation()">Resume Exam</button>
+  </div>
+</div>
+
+<script src="js/core/store.js"></script>
+<script src="js/core/utils.js"></script>
+<script src="js/features/timer.js"></script>
+<script src="js/features/anti-cheat.js"></script>
+<script src="js/features/calculator.js"></script>
+<script src="js/features/analytics.js"></script>
+<script src="js/pages/exam-engine.js"></script>
+</body>
+</html>

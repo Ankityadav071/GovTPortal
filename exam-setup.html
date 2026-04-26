@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Setup — GovTPortal</title>
+<meta name="description" content="Upload questions, configure your exam and launch a practice session.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/setup.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar__logo">
+    <div class="navbar__logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="navbar__brand">Govt<span>Portal</span></span>
+  </a>
+  <div class="navbar__actions">
+    <a href="index.html" class="btn btn-ghost btn-sm">← Back to Home</a>
+  </div>
+</nav>
+
+<main class="setup-page">
+  <div class="setup-container">
+    <div class="setup-header">
+      <h1 class="setup-header__title">Setup Your <span class="gradient-text">Exam</span></h1>
+      <p class="setup-header__desc">Upload questions, configure settings and launch your practice session</p>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper" id="stepper">
+      <div class="step active" data-step="0"><div class="step__dot">1</div><div class="step__label">Upload</div></div>
+      <div class="step" data-step="1"><div class="step__dot">2</div><div class="step__label">Configure</div></div>
+      <div class="step" data-step="2"><div class="step__dot">3</div><div class="step__label">Settings</div></div>
+      <div class="step" data-step="3"><div class="step__dot">4</div><div class="step__label">Launch</div></div>
+    </div>
+
+    <!-- ── STEP 1: UPLOAD ── -->
+    <div class="setup-step active" id="step-0">
+      <h2 class="setup-step__title">Add Your Questions</h2>
+      <p class="setup-step__desc">Upload a CSV/JSON file, paste content, or use the AI prompt to generate questions.</p>
+
+      <!-- Format box with tabs -->
+      <div class="format-box">
+        <div class="format-box__tabs">
+          <button class="format-tab-btn active" data-tab="csv">CSV Format</button>
+          <button class="format-tab-btn" data-tab="json">JSON Format</button>
+          <button class="format-tab-btn" data-tab="ai">🤖 AI Prompt</button>
+        </div>
+
+        <div class="format-tab-content active" id="tab-csv">
+          <div class="code-box">
+            <div class="code-box__header">
+              <span class="code-box__title">CSV Template — Copy this format</span>
+              <button class="btn btn-ghost btn-xs" onclick="copyCSVTemplate()">Copy</button>
+            </div>
+            <pre id="csv-template-pre"></pre>
+          </div>
+        </div>
+
+        <div class="format-tab-content" id="tab-json">
+          <div class="code-box">
+            <div class="code-box__header">
+              <span class="code-box__title">JSON Template — Copy this format</span>
+              <button class="btn btn-ghost btn-xs" onclick="copyJSONTemplate()">Copy</button>
+            </div>
+            <pre id="json-template-pre"></pre>
+          </div>
+        </div>
+
+        <div class="format-tab-content" id="tab-ai">
+          <div class="prompt-box">
+            <p style="font-size:var(--ts-sm);color:var(--c-text-secondary);margin-bottom:var(--sp-3)">Choose a prompt template and copy it to Gemini or ChatGPT:</p>
+
+            <!-- Prompt selector -->
+            <div class="tab-group" style="margin-bottom:var(--sp-4)">
+              <button class="tab-btn active" data-prompt="upsc" onclick="setPrompt('upsc')">UPSC GS</button>
+              <button class="tab-btn" data-prompt="ssc" onclick="setPrompt('ssc')">SSC CGL</button>
+              <button class="tab-btn" data-prompt="Railway" onclick="setPrompt('railway')">Railway</button>
+              <button class="tab-btn" data-prompt="custom" onclick="setPrompt('custom')">Custom</button>
+            </div>
+
+            <textarea class="prompt-textarea" id="ai-prompt-area" readonly></textarea>
+
+            <div class="prompt-actions">
+              <button class="btn btn-secondary btn-sm" onclick="copyPrompt()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy Prompt
+              </button>
+              <button class="btn btn-gemini btn-sm" onclick="openGemini()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                Open Gemini
+              </button>
+              <button class="btn btn-chatgpt btn-sm" onclick="openChatGPT()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+                Open ChatGPT
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drop zone -->
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="file-input" accept=".csv,.json,.txt">
+        <div class="drop-zone__icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="drop-zone__title">Drop your CSV or JSON file here</div>
+        <p class="drop-zone__hint">or click to browse · supports .csv, .json, .txt</p>
+      </div>
+
+      <!-- Or paste -->
+      <div style="margin-top:var(--sp-5)">
+        <div class="form-group">
+          <label class="form-label">Or paste your questions directly (CSV or JSON)</label>
+          <textarea class="textarea" id="paste-area" placeholder="Paste CSV or JSON content here..." style="min-height:140px; font-family:var(--font-mono); font-size:var(--ts-sm)"></textarea>
+        </div>
+        <button class="btn btn-secondary btn-sm" style="margin-top:var(--sp-3)" onclick="parsePasted()">Parse Pasted Content</button>
+      </div>
+
+      <!-- Parse result -->
+      <div class="parsed-preview hidden" id="parsed-preview">
+        <div class="parsed-preview__header">
+          <div class="badge badge-success badge-dot" id="parsed-status">Questions Loaded</div>
+          <button class="btn btn-ghost btn-xs" onclick="clearParsed()">Clear</button>
+        </div>
+        <div class="parsed-preview__stat-row">
+          <div class="parsed-stat">
+            <div class="parsed-stat__val" id="parsed-count">0</div>
+            <div class="parsed-stat__key">Questions</div>
+          </div>
+          <div class="parsed-stat">
+            <div class="parsed-stat__val" id="parsed-sections">0</div>
+            <div class="parsed-stat__key">Sections</div>
+          </div>
+          <div class="parsed-stat">
+            <div class="parsed-stat__val" id="parsed-warnings">0</div>
+            <div class="parsed-stat__key">Warnings</div>
+          </div>
+        </div>
+        <div class="progress-bar"><div class="progress-bar__fill gradient" id="parsed-bar" style="width:100%"></div></div>
+      </div>
+
+      <div class="error-list hidden" id="error-list">
+        <div class="error-list__title">⚠ Parse Errors (Fix these before continuing)</div>
+        <div id="error-items"></div>
+      </div>
+    </div>
+
+    <!-- ── STEP 2: CONFIGURE ── -->
+    <div class="setup-step" id="step-1">
+      <h2 class="setup-step__title">Configure Exam Parameters</h2>
+      <p class="setup-step__desc">Match the settings to your target exam's marking scheme.</p>
+
+      <div class="form-group" style="margin-bottom:var(--sp-6)">
+        <label class="form-label">Exam Title</label>
+        <input type="text" class="input" id="cfg-title" placeholder="e.g. UPSC CSE Mock Test 2024" value="Practice Exam">
+      </div>
+
+      <div class="config-grid">
+        <div class="form-group">
+          <label class="form-label">Total Duration (minutes)</label>
+          <input type="number" class="input" id="cfg-duration" value="60" min="5" max="360">
+          <span class="form-hint">For UPSC CSE: 120 min, SSC CGL: 60 min, Railway: 90 min</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Total Marks</label>
+          <input type="number" class="input" id="cfg-total-marks" value="100" min="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Marks per Correct Answer</label>
+          <input type="number" class="input" id="cfg-correct" value="4" min="1" step="0.5">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Negative Marking (per wrong)</label>
+          <input type="number" class="input" id="cfg-negative" value="1" min="0" step="0.25">
+          <span class="form-hint">Enter 0 for no negative marking</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 3: SETTINGS ── -->
+    <div class="setup-step" id="step-2">
+      <h2 class="setup-step__title">Exam Settings</h2>
+      <p class="setup-step__desc">Configure optional features for your practice session.</p>
+
+      <div class="settings-list">
+        <div class="settings-item">
+          <div class="settings-item__left">
+            <div class="settings-item__title">Anti-Cheat System</div>
+            <div class="settings-item__desc">Fullscreen enforcement, tab switch detection, keyboard block. Simulates real exam conditions.</div>
+          </div>
+          <label class="toggle"><input type="checkbox" id="cfg-anticheat" checked><div class="toggle__track"><div class="toggle__thumb"></div></div></label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item__left">
+            <div class="settings-item__title">Tab Switch Warning</div>
+            <div class="settings-item__desc">Show warning when you switch to another tab or window during exam.</div>
+          </div>
+          <label class="toggle"><input type="checkbox" id="cfg-tabswitch" checked><div class="toggle__track"><div class="toggle__thumb"></div></div></label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item__left">
+            <div class="settings-item__title">Scientific Calculator</div>
+            <div class="settings-item__desc">Optional draggable calculator overlay. Useful for quantitative exams (Railway, Banking).</div>
+          </div>
+          <label class="toggle"><input type="checkbox" id="cfg-calculator"><div class="toggle__track"><div class="toggle__thumb"></div></div></label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item__left">
+            <div class="settings-item__title">Keyboard Navigation</div>
+            <div class="settings-item__desc">Use A/B/C/D to select, N=Next, P=Previous, M=Mark for Review keys during exam.</div>
+          </div>
+          <label class="toggle"><input type="checkbox" id="cfg-keyboard" checked><div class="toggle__track"><div class="toggle__thumb"></div></div></label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item__left">
+            <div class="settings-item__title">Warn-Only Mode</div>
+            <div class="settings-item__desc">Show warnings for violations but don't auto-submit. Good for relaxed practice sessions.</div>
+          </div>
+          <label class="toggle"><input type="checkbox" id="cfg-warnonly"><div class="toggle__track"><div class="toggle__thumb"></div></div></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 4: LAUNCH ── -->
+    <div class="setup-step" id="step-3">
+      <h2 class="setup-step__title">Ready to Launch</h2>
+      <p class="setup-step__desc">Review your exam summary and enter candidate name to begin.</p>
+
+      <div class="form-group" style="margin-bottom:var(--sp-6)">
+        <label class="form-label">Your Name</label>
+        <input type="text" class="input" id="candidate-name" placeholder="Enter your name" style="max-width:400px">
+      </div>
+
+      <div class="launch-summary">
+        <div class="launch-summary__title" id="launch-title">Practice Exam</div>
+        <div class="launch-summary__grid">
+          <div class="launch-summary__item">
+            <div class="launch-summary__label">Questions</div>
+            <div class="launch-summary__value" id="launch-qcount">—</div>
+          </div>
+          <div class="launch-summary__item">
+            <div class="launch-summary__label">Duration</div>
+            <div class="launch-summary__value" id="launch-duration">—</div>
+          </div>
+          <div class="launch-summary__item">
+            <div class="launch-summary__label">Marks Scheme</div>
+            <div class="launch-summary__value" id="launch-marks">—</div>
+          </div>
+          <div class="launch-summary__item">
+            <div class="launch-summary__label">Total Marks</div>
+            <div class="launch-summary__value" id="launch-total-marks">—</div>
+          </div>
+          <div class="launch-summary__item">
+            <div class="launch-summary__label">Anti-Cheat</div>
+            <div class="launch-summary__value" id="launch-anticheat">—</div>
+          </div>
+          <div class="launch-summary__item">
+            <div class="launch-summary__label">Calculator</div>
+            <div class="launch-summary__value" id="launch-calc">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:var(--sp-10);">
+      <button class="btn btn-secondary btn-lg" id="btn-prev" onclick="prevStep()" style="display:none">← Previous</button>
+      <div style="flex:1"></div>
+      <button class="btn btn-primary btn-lg" id="btn-next" onclick="nextStep()">
+        Continue →
+      </button>
+    </div>
+  </div>
+</main>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/core/store.js"></script>
+<script src="js/core/utils.js"></script>
+<script src="js/features/parser.js"></script>
+<script>
+(function() {
+  let currentStep = 0;
+  let parsedQuestions = [];
+
+  // ── Init ──
+  initNavbarScroll();
+
+  // Load templates
+  document.getElementById('csv-template-pre').textContent = Parser.CSV_TEMPLATE;
+  document.getElementById('json-template-pre').textContent = Parser.JSON_TEMPLATE;
+
+  // ── Format tabs ──
+  document.querySelectorAll('.format-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.format-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.format-tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ── AI Prompts ──
+  const PROMPTS = {
+    upsc: `HERE IS MY STUDY MATERIAL (paste below):
+
+[PASTE YOUR STUDY MATERIAL HERE]
+
+YOUR TASK IS TO GIVE ME QUESTIONS BASED ON THIS MATERIAL.
+
+INSTRUCTIONS:
+• Generate 25 MCQ questions for UPSC CSE Prelims General Studies
+• Each question must have exactly 4 options (A, B, C, D)
+• Include the correct answer and a 1-2 line explanation
+• Topics: History, Polity, Geography, Economy, Environment
+• DOUBLE-CHECK all questions for factual accuracy before generating
+
+OUTPUT FORMAT (CSV):
+id,question,optionA,optionB,optionC,optionD,correct,explanation,section,difficulty
+
+Also generate as JSON array if you can.`,
+
+    ssc: `HERE IS MY STUDY MATERIAL (paste below):
+
+[PASTE YOUR STUDY MATERIAL HERE]
+
+YOUR TASK IS TO GIVE ME QUESTIONS BASED ON THIS MATERIAL.
+
+INSTRUCTIONS:
+• Generate 30 MCQ questions for SSC CGL General Awareness
+• Each question must have exactly 4 options (A, B, C, D)
+• Include correct answer and short explanation
+• Topics: GK, Science, History, Polity, Economy, Current Affairs
+• Difficulty level: Mixed (Easy 40%, Medium 40%, Hard 20%)
+• DOUBLE-CHECK all facts before generating
+
+OUTPUT FORMAT (CSV):
+id,question,optionA,optionB,optionC,optionD,correct,explanation,section,difficulty`,
+
+    railway: `HERE IS MY STUDY MATERIAL (paste below):
+
+[PASTE YOUR STUDY MATERIAL HERE]
+
+YOUR TASK IS TO GIVE ME QUESTIONS BASED ON THIS MATERIAL.
+
+INSTRUCTIONS:
+• Generate 30 MCQ questions for RRB Group D / NTPC
+• Topics: Mathematics (35%), Science (35%), GK (20%), Railway GK (10%)
+• Standard: 10th grade level for Science/Math
+• Include correct answer with solution steps for Math questions
+• DOUBLE-CHECK all calculations and facts
+
+OUTPUT FORMAT (CSV):
+id,question,optionA,optionB,optionC,optionD,correct,explanation,section,difficulty`,
+
+    custom: `HERE IS MY STUDY MATERIAL:
+
+[PASTE YOUR STUDY MATERIAL HERE]
+
+YOUR TASK IS TO GIVE ME {NUMBER} MCQ QUESTIONS FOR MY {YOUR EXAM NAME} EXAM.
+
+INSTRUCTIONS:
+• Each question must have exactly 4 options (A, B, C, D)
+• Include the correct answer key (A/B/C/D)
+• Add a brief explanation for each answer
+• DOUBLE-ANALYZE each question for any errors
+• Ensure questions match the exam pattern and difficulty
+
+GENERATE IN THIS CSV FORMAT:
+id,question,optionA,optionB,optionC,optionD,correct,explanation,section,difficulty
+
+IF YOU CAN SEND A FILE — SEND THAT TOO, PLUS THE CSV FORMAT BELOW FOR COPY-PASTE.`,
+  };
+
+  let currentPrompt = 'upsc';
+  document.getElementById('ai-prompt-area').value = PROMPTS.upsc;
+
+  window.setPrompt = function(key) {
+    currentPrompt = key;
+    document.getElementById('ai-prompt-area').value = PROMPTS[key];
+    document.querySelectorAll('[data-prompt]').forEach(b => b.classList.toggle('active', b.dataset.prompt === key));
+  };
+  window.copyPrompt = () => copyText(document.getElementById('ai-prompt-area').value, 'Prompt copied!');
+  window.openGemini = () => {
+    copyText(document.getElementById('ai-prompt-area').value, 'Prompt copied — paste in Gemini');
+    setTimeout(() => window.open('https://gemini.google.com', '_blank'), 500);
+  };
+  window.openChatGPT = () => {
+    copyText(document.getElementById('ai-prompt-area').value, 'Prompt copied — paste in ChatGPT');
+    setTimeout(() => window.open('https://chatgpt.com', '_blank'), 500);
+  };
+  window.copyCSVTemplate = () => copyText(Parser.CSV_TEMPLATE, 'CSV template copied!');
+  window.copyJSONTemplate = () => copyText(Parser.JSON_TEMPLATE, 'JSON template copied!');
+
+  // ── File drop ──
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) readFile(file);
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) readFile(fileInput.files[0]);
+  });
+
+  function readFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => parseRaw(e.target.result, file.name.endsWith('.json') ? 'json' : 'csv');
+    reader.readAsText(file);
+  }
+
+  window.parsePasted = function() {
+    const raw = document.getElementById('paste-area').value.trim();
+    if (!raw) { toast('Paste some content first', 'warn'); return; }
+    parseRaw(raw);
+  };
+
+  function parseRaw(raw, hint) {
+    const result = Parser.parse(raw, hint);
+    const errorList = document.getElementById('error-list');
+    const errorItems = document.getElementById('error-items');
+
+    if (result.errors.length > 0) {
+      errorList.classList.remove('hidden');
+      errorItems.innerHTML = result.errors.map(e => `<div class="error-item">• ${e}</div>`).join('');
+    } else {
+      errorList.classList.add('hidden');
+    }
+
+    if (result.questions.length > 0) {
+      parsedQuestions = result.questions;
+      Store.setQuestions(parsedQuestions);
+      const sections = Parser.getSections(parsedQuestions);
+      document.getElementById('parsed-count').textContent = parsedQuestions.length;
+      document.getElementById('parsed-sections').textContent = sections.length;
+      document.getElementById('parsed-warnings').textContent = result.warnings.length;
+      document.getElementById('parsed-preview').classList.remove('hidden');
+      toast(`Loaded ${parsedQuestions.length} questions successfully!`, 'success');
+    } else if (!result.errors.length) {
+      toast('No questions found in the content', 'warn');
+    }
+  }
+
+  window.clearParsed = function() {
+    parsedQuestions = [];
+    Store.clearQuestions();
+    document.getElementById('parsed-preview').classList.add('hidden');
+    document.getElementById('error-list').classList.add('hidden');
+    document.getElementById('paste-area').value = '';
+    toast('Questions cleared', 'info');
+  };
+
+  // ── Stepper ──
+  function updateStepper() {
+    document.querySelectorAll('.step').forEach((s, i) => {
+      s.classList.toggle('active', i === currentStep);
+      s.classList.toggle('completed', i < currentStep);
+    });
+    document.querySelectorAll('.setup-step').forEach((s, i) => {
+      s.classList.toggle('active', i === currentStep);
+    });
+    document.getElementById('btn-prev').style.display = currentStep > 0 ? '' : 'none';
+    const btnNext = document.getElementById('btn-next');
+    btnNext.textContent = currentStep === 3 ? 'Enter Exam Lobby →' : 'Continue →';
+  }
+
+  function validateStep() {
+    if (currentStep === 0) {
+      const qs = Store.getQuestions();
+      if (!qs.length) { toast('Please upload or paste questions first', 'warn'); return false; }
+      return true;
+    }
+    if (currentStep === 3) {
+      const name = document.getElementById('candidate-name').value.trim();
+      if (!name) { toast('Please enter your name', 'warn'); document.getElementById('candidate-name').focus(); return false; }
+    }
+    return true;
+  }
+
+  function populateLaunchSummary() {
+    const qs = Store.getQuestions();
+    const title = document.getElementById('cfg-title').value || 'Practice Exam';
+    const duration = parseInt(document.getElementById('cfg-duration').value) || 60;
+    const correct = parseFloat(document.getElementById('cfg-correct').value) || 4;
+    const negative = parseFloat(document.getElementById('cfg-negative').value) || 1;
+    const totalMarks = parseFloat(document.getElementById('cfg-total-marks').value) || qs.length * correct;
+    const antiCheat = document.getElementById('cfg-anticheat').checked;
+    const calc = document.getElementById('cfg-calculator').checked;
+
+    document.getElementById('launch-title').textContent = title;
+    document.getElementById('launch-qcount').textContent = qs.length;
+    document.getElementById('launch-duration').textContent = duration + ' minutes';
+    document.getElementById('launch-marks').textContent = `+${correct} / -${negative}`;
+    document.getElementById('launch-total-marks').textContent = totalMarks;
+    document.getElementById('launch-anticheat').textContent = antiCheat ? '✅ Enabled' : '❌ Disabled';
+    document.getElementById('launch-calc').textContent = calc ? '✅ Enabled' : '❌ Disabled';
+  }
+
+  window.nextStep = function() {
+    if (!validateStep()) return;
+
+    if (currentStep === 1) {
+      // Save config
+      Store.setConfig({
+        examTitle:      document.getElementById('cfg-title').value || 'Practice Exam',
+        duration:       parseInt(document.getElementById('cfg-duration').value) || 60,
+        marksCorrect:   parseFloat(document.getElementById('cfg-correct').value) || 4,
+        marksNegative:  parseFloat(document.getElementById('cfg-negative').value) || 1,
+        totalMarks:     parseFloat(document.getElementById('cfg-total-marks').value) || 100,
+      });
+    }
+    if (currentStep === 2) {
+      Store.setConfig({
+        antiCheat:     document.getElementById('cfg-anticheat').checked,
+        tabSwitchWarn: document.getElementById('cfg-tabswitch').checked,
+        calculator:    document.getElementById('cfg-calculator').checked,
+        keyboardNav:   document.getElementById('cfg-keyboard').checked,
+        warnOnly:      document.getElementById('cfg-warnonly').checked,
+      });
+    }
+    if (currentStep === 3) {
+      Store.setConfig({ candidateName: document.getElementById('candidate-name').value.trim() });
+      Store.clearExamState();
+      window.location.href = 'exam-lobby.html';
+      return;
+    }
+
+    if (currentStep < 3) {
+      currentStep++;
+      if (currentStep === 3) populateLaunchSummary();
+      updateStepper();
+    }
+  };
+
+  window.prevStep = function() {
+    if (currentStep > 0) { currentStep--; updateStepper(); }
+  };
+
+  // Pre-fill from store if returning
+  const savedCfg = Store.getConfig();
+  if (savedCfg.examTitle !== 'Practice Exam') document.getElementById('cfg-title').value = savedCfg.examTitle;
+  document.getElementById('cfg-duration').value = savedCfg.duration;
+  document.getElementById('cfg-correct').value = savedCfg.marksCorrect;
+  document.getElementById('cfg-negative').value = savedCfg.marksNegative;
+  document.getElementById('cfg-anticheat').checked = savedCfg.antiCheat;
+  document.getElementById('cfg-calculator').checked = savedCfg.calculator;
+
+  const savedQs = Store.getQuestions();
+  if (savedQs.length) {
+    parsedQuestions = savedQs;
+    document.getElementById('parsed-count').textContent = savedQs.length;
+    document.getElementById('parsed-sections').textContent = Parser.getSections(savedQs).length;
+    document.getElementById('parsed-warnings').textContent = 0;
+    document.getElementById('parsed-preview').classList.remove('hidden');
+  }
+
+  updateStepper();
+})();
+</script>
+</body>
+</html>

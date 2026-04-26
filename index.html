@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GovTPortal — Free Exam Prep for UPSC, SSC, Railway & Banking</title>
+<meta name="description" content="India's best self-exam preparation platform. Practice UPSC, SSC, Railway & Banking exams with real CBT interface, anti-cheat, analytics and AI-powered question generation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/landing.css">
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar" id="main-nav">
+  <a href="index.html" class="navbar__logo">
+    <div class="navbar__logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="navbar__brand">Govt<span>Portal</span></span>
+  </a>
+  <nav class="navbar__links">
+    <a href="index.html" class="navbar__link active">Home</a>
+    <a href="onboarding.html" class="navbar__link">How it Works</a>
+    <a href="ai-tools.html" class="navbar__link">AI Tools</a>
+    <a href="admin.html" class="navbar__link">Admin</a>
+  </nav>
+  <div class="navbar__actions">
+    <a href="exam-setup.html" class="btn btn-primary btn-sm">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Start Exam
+    </a>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-wrap" style="margin-top: var(--nav-h);">
+  <span class="ticker-label">📢 LIVE</span>
+  <div class="ticker-track" id="ticker-track">
+    <span class="ticker-item">🔔 UPSC CSE 2025 Notification Released — Apply before May 30</span>
+    <span class="ticker-item">📝 SSC CGL 2025 Tier-1 Exam Date Announced — July 14-27</span>
+    <span class="ticker-item">🚂 RRB Group D 2025 Recruitment — 32,000+ Vacancies</span>
+    <span class="ticker-item">🏦 IBPS PO 2025 Registration Open — Closes June 10</span>
+    <span class="ticker-item">📚 New UPSC GS-1 Mock Paper Added — 25 Questions</span>
+    <span class="ticker-item">⚡ AI Question Generator Update — Now supports Hindi prompt</span>
+    <span class="ticker-item">🔔 UPSC CSE 2025 Notification Released — Apply before May 30</span>
+    <span class="ticker-item">📝 SSC CGL 2025 Tier-1 Exam Date Announced — July 14-27</span>
+    <span class="ticker-item">🚂 RRB Group D 2025 Recruitment — 32,000+ Vacancies</span>
+    <span class="ticker-item">🏦 IBPS PO 2025 Registration Open — Closes June 10</span>
+    <span class="ticker-item">📚 New UPSC GS-1 Mock Paper Added — 25 Questions</span>
+    <span class="ticker-item">⚡ AI Question Generator Update — Now supports Hindi prompt</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__bg-glow"></div>
+  <div class="container">
+    <div class="hero__content">
+      <div class="hero__pill">
+        <span class="hero__pill-dot"></span>
+        Free · No Login Required · 80+ Questions
+      </div>
+      <h1 class="hero__title">
+        Crack Government Exams with<br>
+        <span class="gradient-text">Real CBT Practice</span>
+      </h1>
+      <p class="hero__desc">
+        India's most advanced self-exam prep platform. Practice UPSC, SSC, Railway and Banking exams with a real Computer Based Test interface — anti-cheat, analytics, AI tools included.
+      </p>
+      <div class="hero__actions">
+        <a href="exam-setup.html" class="btn btn-primary btn-xl">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Start Free Practice
+        </a>
+        <a href="onboarding.html" class="btn btn-secondary btn-xl">
+          Learn How it Works
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </div>
+      <div class="hero__stats stagger">
+        <div class="hero__stat">
+          <span class="hero__stat-value" id="stat-questions">80+</span>
+          <span class="hero__stat-label">Free Questions</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-value" id="stat-exams">4</span>
+          <span class="hero__stat-label">Exam Categories</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-value" id="stat-papers">4</span>
+          <span class="hero__stat-label">Mock Papers</span>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-value gradient-text">Free</span>
+          <span class="hero__stat-label">Forever</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini exam preview (right side) -->
+    <div class="hero__visual">
+      <div class="hero__card-stack">
+        <div class="card card-glass card-elevated mini-exam-card">
+          <div class="mini-exam-card__header">
+            <div>
+              <div class="badge badge-primary badge-dot">UPSC Mock</div>
+            </div>
+            <span class="mini-timer">47:22</span>
+          </div>
+          <div class="mini-q-text">
+            Which article of the Indian Constitution guarantees 'Right to Equality'?
+          </div>
+          <div class="mini-option">
+            <span class="mini-option-key">A</span> Article 12
+          </div>
+          <div class="mini-option">
+            <span class="mini-option-key">B</span> Article 13
+          </div>
+          <div class="mini-option selected">
+            <span class="mini-option-key">C</span> Article 14 ✓
+          </div>
+          <div class="mini-option">
+            <span class="mini-option-key">D</span> Article 15
+          </div>
+        </div>
+        <div class="card card-glass"></div>
+        <div class="card card-glass"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FREE PAPERS -->
+<section class="papers-section" id="papers">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-header__eyebrow">Free Question Papers</div>
+      <h2 class="section-header__title">Start Practicing Right Now</h2>
+      <p class="section-header__desc">Curated mock papers based on actual exam patterns. No signup required.</p>
+    </div>
+
+    <div class="category-tabs stagger" id="category-tabs">
+      <button class="cat-tab active" data-cat="all">All Papers</button>
+      <button class="cat-tab" data-cat="UPSC">UPSC</button>
+      <button class="cat-tab" data-cat="SSC">SSC</button>
+      <button class="cat-tab" data-cat="Railway">Railway</button>
+      <button class="cat-tab" data-cat="Banking">Banking</button>
+    </div>
+
+    <div class="papers-grid" id="papers-grid"></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center; align-items:center;">
+      <div class="section-header__eyebrow">Platform Features</div>
+      <h2 class="section-header__title">Everything You Need to Succeed</h2>
+      <p class="section-header__desc" style="max-width:600px">Built by aspirants, for aspirants — with the same interface used in actual CBT exams.</p>
+    </div>
+    <div class="features-grid stagger" id="features-grid"></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <div class="section-header__eyebrow">Simple Process</div>
+      <h2 class="section-header__title">From Zero to Exam Ready in 4 Steps</h2>
+    </div>
+    <div class="how-steps stagger">
+      <div class="how-step">
+        <div class="how-step__num">1</div>
+        <div class="how-step__title">Upload or Select</div>
+        <p class="how-step__desc">Select a free paper or upload your own questions in CSV/JSON format</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step__num">2</div>
+        <div class="how-step__title">Configure Exam</div>
+        <p class="how-step__desc">Set timer, marks scheme, anti-cheat, calculator options as per your exam</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step__num">3</div>
+        <div class="how-step__title">Attempt Exam</div>
+        <p class="how-step__desc">Real CBT interface with section-wise navigation, keyboard shortcuts, timer</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step__num">4</div>
+        <div class="how-step__title">Analyze Results</div>
+        <p class="how-step__desc">Deep analytics, weak areas, per-question time, export PDF report</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI BANNER -->
+<div class="container">
+  <div class="ai-banner reveal">
+    <h2 class="ai-banner__title">
+      Generate 100+ Questions in<br>
+      <span class="gradient-text">30 Seconds with AI</span>
+    </h2>
+    <p class="ai-banner__desc">Use our ready-made AI prompts with Gemini or ChatGPT to generate exam-quality questions from your study material instantly.</p>
+    <div class="ai-banner__actions">
+      <a href="ai-tools.html" class="btn btn-primary btn-lg">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        Generate with AI
+      </a>
+      <a href="exam-setup.html" class="btn btn-glass btn-lg">Upload Questions</a>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;">
+      <div class="section-header__eyebrow">Student Reviews</div>
+      <h2 class="section-header__title">Loved by Aspirants Across India</h2>
+    </div>
+    <div class="testimonials-grid stagger">
+      <div class="card card-elevated testimonial-card">
+        <div class="testimonial-card__stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-card__text">"Finally a free platform that actually feels like the real TCS iON interface. The anti-cheat and timer made my practice sessions so productive. Cleared SSC CGL Tier-1 in first attempt!"</p>
+        <div class="testimonial-card__author">
+          <div class="testimonial-card__avatar">R</div>
+          <div>
+            <div class="testimonial-card__name">Rahul Sharma</div>
+            <div class="testimonial-card__exam">SSC CGL 2024 — Selected</div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-elevated testimonial-card">
+        <div class="testimonial-card__stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-card__text">"The AI tool is a game-changer. I pasted my NCERT chapters and got 50 UPSC-standard questions instantly. The per-question time analysis showed exactly where I was wasting time."</p>
+        <div class="testimonial-card__author">
+          <div class="testimonial-card__avatar">P</div>
+          <div>
+            <div class="testimonial-card__name">Priya Nair</div>
+            <div class="testimonial-card__exam">UPSC CSE Aspirant</div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-elevated testimonial-card">
+        <div class="testimonial-card__stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-card__text">"Used this for RRB Group D prep. The section-wise question navigation and the PDF report helped me understand my weak areas in Science section. 100% recommend!"</p>
+        <div class="testimonial-card__author">
+          <div class="testimonial-card__avatar">A</div>
+          <div>
+            <div class="testimonial-card__name">Amit Yadav</div>
+            <div class="testimonial-card__exam">RRB Group D 2024 — Selected</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="navbar__logo" style="margin-bottom: var(--sp-3);">
+          <div class="navbar__logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <span class="navbar__brand">Govt<span>Portal</span></span>
+        </a>
+        <p class="footer-brand__desc">Free self-exam preparation platform for Indian government exam aspirants. Practice UPSC, SSC, Railway and Banking with real CBT interface.</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col__title">Practice</div>
+        <div class="footer-col__links">
+          <a href="index.html#papers" class="footer-col__link">Free Papers</a>
+          <a href="exam-setup.html" class="footer-col__link">Upload Questions</a>
+          <a href="ai-tools.html" class="footer-col__link">AI Generator</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col__title">Exams</div>
+        <div class="footer-col__links">
+          <a href="#" class="footer-col__link">UPSC CSE</a>
+          <a href="#" class="footer-col__link">SSC CGL / CGL</a>
+          <a href="#" class="footer-col__link">RRB Group D / NTPC</a>
+          <a href="#" class="footer-col__link">IBPS PO / Clerk</a>
+          <a href="#" class="footer-col__link">State PSC</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col__title">Platform</div>
+        <div class="footer-col__links">
+          <a href="onboarding.html" class="footer-col__link">How it Works</a>
+          <a href="admin.html" class="footer-col__link">Admin Panel</a>
+          <a href="#" class="footer-col__link">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 GovTPortal. Made with ❤️ for Indian Exam Aspirants.</span>
+      <div class="footer-tricolor">
+        <span style="background:#FF9933;"></span>
+        <span style="background:white;"></span>
+        <span style="background:#138808;"></span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/core/store.js"></script>
+<script src="js/core/utils.js"></script>
+<script src="js/data/sample-papers.js"></script>
+<script>
+// ── LANDING PAGE CONTROLLER ──────────────────────────────────
+(function() {
+  initNavbarScroll();
+  initReveal();
+
+  const FEATURES = [
+    { icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`, color: 'var(--c-primary-soft)', iconColor: 'var(--c-primary)', title: 'Section-wise Questions', desc: 'Navigate between exam sections with dedicated progress bars per section, just like the real exam.' },
+    { icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`, color: 'var(--c-info-soft)', iconColor: 'var(--c-info)', title: 'Smart Timer', desc: 'Countdown timer with color-changing warning states. Auto-submits on expiry. Per-question time tracked.' },
+    { icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`, color: 'var(--c-success-soft)', iconColor: 'var(--c-success-light)', title: 'Jump Navigation', desc: 'Click any question number to jump directly. Color-coded grid shows answered, marked, skipped states.' },
+    { icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`, color: 'var(--c-danger-soft)', iconColor: 'var(--c-danger-light)', title: 'Anti-Cheat System', desc: 'Tab switch detection, fullscreen enforcement, keyboard shortcut blocking — all configurable.' },
+    { icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`, color: 'var(--c-accent-soft)', iconColor: 'var(--c-accent)', title: 'Deep Analytics', desc: 'Score breakdown by section, accuracy, attempt rate, time heatmap, grade, and improvement suggestions.' },
+    { icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`, color: 'var(--c-warn-soft)', iconColor: 'var(--c-warn)', title: 'AI Question Generator', desc: 'Ready-made prompts for Gemini & ChatGPT. Paste your study material and get 100+ questions instantly.' },
+    { icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>`, color: 'var(--c-primary-soft)', iconColor: 'var(--c-primary-light)', title: 'Scientific Calculator', desc: 'Draggable scientific calculator with memory functions, keyboard input — exempt from anti-cheat.' },
+    { icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`, color: 'var(--c-success-soft)', iconColor: 'var(--c-success-light)', title: 'PDF Report Export', desc: 'Professional 3-page PDF with score summary, section analysis, question details and recommendations.' },
+  ];
+
+  // Render features
+  const fg = document.getElementById('features-grid');
+  FEATURES.forEach(f => {
+    fg.innerHTML += `
+      <div class="feature-card">
+        <div class="feature-card__icon" style="background:${f.color}; color:${f.iconColor}">${f.icon}</div>
+        <div class="feature-card__title">${f.title}</div>
+        <p class="feature-card__desc">${f.desc}</p>
+      </div>`;
+  });
+
+  // Render papers
+  const pg = document.getElementById('papers-grid');
+  function renderPapers(cat) {
+    const papers = cat === 'all' ? SAMPLE_PAPERS : SAMPLE_PAPERS.filter(p => p.category === cat);
+    pg.innerHTML = papers.map(p => `
+      <div class="paper-card" style="--paper-color:${p.color}" onclick="startPaper('${p.id}')">
+        <div class="paper-card__category">${p.category} — ${p.subcategory}</div>
+        <div class="paper-card__title">${p.title}</div>
+        <div class="paper-card__meta">
+          <span class="paper-card__chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${p.duration} min
+          </span>
+          <span class="paper-card__chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            ${p.totalQuestions} Questions
+          </span>
+          <span class="paper-card__chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            ${p.year}
+          </span>
+          <span class="paper-card__chip" style="margin-left:auto;">
+            <span class="badge ${p.difficulty==='Hard'?'badge-danger':p.difficulty==='Medium'?'badge-warn':'badge-success'}">${p.difficulty}</span>
+          </span>
+        </div>
+        <button class="btn btn-primary btn-sm" style="margin-top:var(--sp-2)">Start Exam →</button>
+      </div>`).join('');
+  }
+  renderPapers('all');
+
+  // Category tabs
+  document.querySelectorAll('.cat-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderPapers(btn.dataset.cat);
+    });
+  });
+
+  // Stats counter animation
+  const statEls = document.querySelectorAll('.hero__stat-value[id]');
+  setTimeout(() => {
+    animateCount(document.getElementById('stat-questions'), 0, 80, 1500, '+');
+    animateCount(document.getElementById('stat-exams'), 0, 4, 800);
+    animateCount(document.getElementById('stat-papers'), 0, 4, 800);
+  }, 400);
+
+  window.startPaper = function(paperId) {
+    const paper = SAMPLE_PAPERS.find(p => p.id === paperId);
+    if (!paper) return;
+    Store.setConfig({
+      examTitle:      paper.title,
+      duration:       paper.duration,
+      marksCorrect:   paper.marksCorrect,
+      marksNegative:  paper.marksNegative,
+      totalMarks:     paper.totalQuestions * paper.marksCorrect,
+      category:       paper.category,
+      year:           paper.year,
+      examId:         paper.id,
+      source:         'library',
+    });
+    Store.setQuestions(paper.questions);
+    Store.clearExamState();
+    window.location.href = 'exam-lobby.html';
+  };
+})();
+</script>
+</body>
+</html>

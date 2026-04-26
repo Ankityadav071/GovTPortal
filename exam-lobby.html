@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Lobby — GovTPortal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/setup.css">
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar__logo">
+    <div class="navbar__logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="navbar__brand">Govt<span>Portal</span></span>
+  </a>
+  <div class="navbar__actions">
+    <a href="exam-setup.html" class="btn btn-ghost btn-sm">← Back to Setup</a>
+  </div>
+</nav>
+
+<main class="lobby-page">
+  <div class="lobby-container">
+    <div class="lobby-header">
+      <h1 class="lobby-title">Exam <span class="gradient-text">Lobby</span></h1>
+      <p style="color:var(--c-text-secondary)">Read the instructions carefully before beginning</p>
+    </div>
+
+    <!-- Exam summary card -->
+    <div class="lobby-exam-card">
+      <div class="badge badge-primary badge-dot" style="margin-bottom:var(--sp-3)" id="lobby-category">Category</div>
+      <div class="lobby-exam-title" id="lobby-title">Practice Exam</div>
+      <div class="lobby-exam-meta" id="lobby-meta">Loading exam details...</div>
+      <div class="lobby-stats-row stagger">
+        <div class="hero__stat">
+          <div class="hero__stat-value" id="lobby-qcount">—</div>
+          <div class="hero__stat-label">Questions</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value" id="lobby-duration">—</div>
+          <div class="hero__stat-label">Minutes</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value" id="lobby-maxmarks">—</div>
+          <div class="hero__stat-label">Max Marks</div>
+        </div>
+        <div class="hero__stat">
+          <div class="hero__stat-value" id="lobby-marks-scheme">—</div>
+          <div class="hero__stat-label">Marking</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active features -->
+    <div class="lobby-badges" id="lobby-badges"></div>
+
+    <!-- Instructions -->
+    <div class="instructions-card">
+      <div class="instructions-title">📋 General Instructions</div>
+      <div class="instruction-list">
+        <div class="instruction-item">
+          <div class="instruction-item__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>The exam will begin as soon as you click "Begin Exam". The timer will start immediately.</span>
+        </div>
+        <div class="instruction-item">
+          <div class="instruction-item__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Use the question navigation panel on the right to jump directly to any question.</span>
+        </div>
+        <div class="instruction-item">
+          <div class="instruction-item__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Click "Save & Next" to answer a question, or "Mark for Review" to flag it for later review.</span>
+        </div>
+        <div class="instruction-item">
+          <div class="instruction-item__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>Keyboard shortcuts: <strong>A/B/C/D</strong> select options, <strong>N</strong>=Next, <strong>P</strong>=Previous, <strong>M</strong>=Mark for Review, <strong>S</strong>=Save & Next.</span>
+        </div>
+        <div class="instruction-item" id="anticheat-instruction"></div>
+        <div class="instruction-item">
+          <div class="instruction-item__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <span>The exam will auto-submit when time runs out or when you click the Submit button.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Candidate name (if not set) -->
+    <div class="lobby-candidate" id="candidate-section">
+      <div class="form-group" style="max-width:360px">
+        <label class="form-label">Your Name</label>
+        <input type="text" class="input" id="candidate-name" placeholder="Enter your name">
+        <span class="form-hint">Appear on the result PDF report</span>
+      </div>
+    </div>
+
+    <!-- Begin Button -->
+    <button class="btn btn-primary btn-xl lobby-begin-btn" id="begin-btn" onclick="beginExam()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Begin Exam
+    </button>
+  </div>
+</main>
+
+<script src="js/core/store.js"></script>
+<script src="js/core/utils.js"></script>
+<script>
+(function() {
+  const cfg = Store.getConfig();
+  const qs  = Store.getQuestions();
+
+  if (!qs.length) {
+    toast('No questions found. Redirecting to setup...', 'warn');
+    setTimeout(() => window.location.href = 'exam-setup.html', 2000);
+    return;
+  }
+
+  // Populate exam info
+  document.getElementById('lobby-title').textContent    = cfg.examTitle;
+  document.getElementById('lobby-category').textContent = cfg.category || 'Practice';
+  document.getElementById('lobby-meta').textContent     = cfg.year ? `${cfg.category} ${cfg.subcategory || ''} • ${cfg.year}` : 'Custom Exam';
+  document.getElementById('lobby-qcount').textContent   = qs.length;
+  document.getElementById('lobby-duration').textContent = cfg.duration;
+  document.getElementById('lobby-maxmarks').textContent = cfg.totalMarks || qs.length * cfg.marksCorrect;
+  document.getElementById('lobby-marks-scheme').textContent = `+${cfg.marksCorrect}/-${cfg.marksNegative}`;
+
+  // Pre-fill name
+  if (cfg.candidateName) {
+    document.getElementById('candidate-name').value = cfg.candidateName;
+  }
+
+  // Feature badges
+  const badges = document.getElementById('lobby-badges');
+  const features = [
+    { active: cfg.antiCheat,    label: 'Anti-Cheat ON',    type: 'danger' },
+    { active: !cfg.antiCheat,   label: 'Anti-Cheat OFF',   type: 'neutral' },
+    { active: cfg.calculator,   label: 'Calculator ON',    type: 'success' },
+    { active: cfg.tabSwitchWarn,label: 'Tab Warning ON',   type: 'warn' },
+    { active: cfg.keyboardNav,  label: 'Keyboard Nav ON',  type: 'info' },
+  ].filter(f => f.active);
+  badges.innerHTML = features.map(f =>
+    `<span class="badge badge-${f.type}">${f.label}</span>`
+  ).join('');
+
+  // Anti-cheat instruction
+  const acEl = document.getElementById('anticheat-instruction');
+  if (cfg.antiCheat) {
+    acEl.innerHTML = `
+      <div class="instruction-item__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--c-danger-light)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <span><strong style="color:var(--c-danger-light)">Anti-Cheat Active:</strong> The exam will enter fullscreen. Switching tabs or exiting fullscreen will count as a violation. ${cfg.violationLimit || 3} violations will auto-submit the exam.</span>`;
+  } else {
+    acEl.innerHTML = `
+      <div class="instruction-item__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--c-success-light)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <span><strong style="color:var(--c-success-light)">Relaxed Mode:</strong> Anti-cheat is disabled. You can switch tabs and exit fullscreen freely.</span>`;
+  }
+
+  window.beginExam = function() {
+    const name = document.getElementById('candidate-name').value.trim();
+    if (!name) { toast('Please enter your name', 'warn'); document.getElementById('candidate-name').focus(); return; }
+    Store.setConfig({ candidateName: name });
+    Store.clearExamState();
+    Store.setSession({ startTime: Date.now() });
+    window.location.href = 'exam.html';
+  };
+})();
+</script>
+</body>
+</html>

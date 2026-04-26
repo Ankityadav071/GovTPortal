@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Question Generator — GovTPortal</title>
+<meta name="description" content="Generate UPSC, SSC, Railway and Banking exam questions instantly using Gemini or ChatGPT.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/setup.css">
+</head>
+<body>
+<nav class="navbar" id="main-nav">
+  <a href="index.html" class="navbar__logo">
+    <div class="navbar__logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="navbar__brand">Govt<span>Portal</span></span>
+  </a>
+  <nav class="navbar__links">
+    <a href="index.html" class="navbar__link">Home</a>
+    <a href="ai-tools.html" class="navbar__link active">AI Tools</a>
+  </nav>
+  <div class="navbar__actions">
+    <a href="exam-setup.html" class="btn btn-primary btn-sm">Start Exam</a>
+  </div>
+</nav>
+
+<main style="padding-top:var(--nav-h);min-height:100vh;padding-bottom:var(--sp-16)">
+  <div class="container" style="max-width:1000px">
+
+    <!-- Hero -->
+    <div style="text-align:center;padding:var(--sp-14) 0 var(--sp-10)">
+      <div class="badge badge-accent badge-dot" style="margin-bottom:var(--sp-5)">AI-Powered</div>
+      <h1 style="font-size:var(--ts-5xl);font-weight:900;letter-spacing:-0.04em;margin-bottom:var(--sp-4)">
+        Generate Exam Questions<br>
+        <span class="gradient-text">in 30 Seconds</span>
+      </h1>
+      <p style="font-size:var(--ts-xl);color:var(--c-text-secondary);max-width:560px;margin:0 auto">
+        Copy a ready-made AI prompt, paste your study material, and get 100+ exam-quality MCQs instantly.
+      </p>
+    </div>
+
+    <!-- How it works strip -->
+    <div class="how-steps stagger" style="margin-bottom:var(--sp-12)">
+      <div class="how-step" style="flex:1;min-width:0">
+        <div class="how-step__num">1</div>
+        <div class="how-step__title">Choose Prompt</div>
+        <p class="how-step__desc">Select your target exam to load a pre-built prompt template</p>
+      </div>
+      <div class="how-step" style="flex:1;min-width:0">
+        <div class="how-step__num">2</div>
+        <div class="how-step__title">Add Study Material</div>
+        <p class="how-step__desc">Replace the placeholder with your notes, NCERT text, or any content</p>
+      </div>
+      <div class="how-step" style="flex:1;min-width:0">
+        <div class="how-step__num">3</div>
+        <div class="how-step__title">Open AI & Paste</div>
+        <p class="how-step__desc">Click Gemini or ChatGPT Button → Paste → Get questions in seconds</p>
+      </div>
+      <div class="how-step" style="flex:1;min-width:0">
+        <div class="how-step__num">4</div>
+        <div class="how-step__title">Upload & Practice</div>
+        <p class="how-step__desc">Copy the CSV output → Upload in Exam Setup → Start practice now</p>
+      </div>
+    </div>
+
+    <!-- Prompt Generator Card -->
+    <div class="card card-elevated" style="padding:0;overflow:hidden;margin-bottom:var(--sp-8)">
+      <!-- Tabs top bar -->
+      <div style="background:var(--c-bg-elevated);border-bottom:1px solid var(--c-border);padding:0 var(--sp-6)">
+        <div class="tab-group" id="exam-type-tabs">
+          <button class="tab-btn active" data-exam="upsc"    onclick="AITools.loadPrompt('upsc')">UPSC CSE</button>
+          <button class="tab-btn" data-exam="ssc"     onclick="AITools.loadPrompt('ssc')">SSC CGL</button>
+          <button class="tab-btn" data-exam="railway" onclick="AITools.loadPrompt('railway')">Railway RRB</button>
+          <button class="tab-btn" data-exam="banking" onclick="AITools.loadPrompt('banking')">Banking IBPS</button>
+          <button class="tab-btn" data-exam="custom"  onclick="AITools.loadPrompt('custom')">Custom ✨</button>
+        </div>
+      </div>
+
+      <div style="padding:var(--sp-6)">
+        <!-- Settings row -->
+        <div style="display:flex;gap:var(--sp-4);flex-wrap:wrap;margin-bottom:var(--sp-5)">
+          <div class="form-group" style="flex:1;min-width:140px">
+            <label class="form-label">Number of Questions</label>
+            <select class="input select" id="ai-num-q">
+              <option value="20">20 Questions</option>
+              <option value="30" selected>30 Questions</option>
+              <option value="50">50 Questions</option>
+              <option value="75">75 Questions</option>
+              <option value="100">100 Questions</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex:1;min-width:140px">
+            <label class="form-label">Difficulty Mix</label>
+            <select class="input select" id="ai-diff">
+              <option value="mixed">Mixed (Easy/Med/Hard)</option>
+              <option value="easy">Easy only</option>
+              <option value="medium">Medium only</option>
+              <option value="hard">Hard only</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex:1;min-width:140px">
+            <label class="form-label">Output Format</label>
+            <select class="input select" id="ai-format">
+              <option value="csv">CSV (recommended)</option>
+              <option value="json">JSON</option>
+              <option value="both">Both CSV + JSON</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Prompt area -->
+        <div class="form-group" style="margin-bottom:var(--sp-4)">
+          <label class="form-label">Generated Prompt — Edit as needed, then copy</label>
+          <textarea id="ai-prompt" class="textarea" style="min-height:300px;font-size:var(--ts-sm);font-family:var(--font-mono)"></textarea>
+        </div>
+
+        <!-- Action buttons -->
+        <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
+          <button class="btn btn-secondary" onclick="AITools.copyPrompt()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Prompt
+          </button>
+          <button class="btn btn-gemini" onclick="AITools.openGemini()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2"/><path d="m9 12 2 2 4-4"/></svg>
+            Open Gemini AI
+          </button>
+          <button class="btn btn-chatgpt" onclick="AITools.openChatGPT()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+            Open ChatGPT
+          </button>
+          <div style="flex:1"></div>
+          <button class="btn btn-primary" onclick="AITools.regenerate()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+            Regenerate
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Format Templates -->
+    <div style="margin-bottom:var(--sp-8)">
+      <h2 style="font-size:var(--ts-2xl);font-weight:800;margin-bottom:var(--sp-6)">Expected Output Format</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5)">
+        <div class="code-box">
+          <div class="code-box__header">
+            <span class="code-box__title">CSV Format</span>
+            <button class="btn btn-ghost btn-xs" onclick="copyCSV()">Copy</button>
+          </div>
+          <pre id="csv-template" style="max-height:220px;overflow:auto"></pre>
+        </div>
+        <div class="code-box">
+          <div class="code-box__header">
+            <span class="code-box__title">JSON Format</span>
+            <button class="btn btn-ghost btn-xs" onclick="copyJSON()">Copy</button>
+          </div>
+          <pre id="json-template" style="max-height:220px;overflow:auto"></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- After Generation: Upload & Test -->
+    <div class="card card-elevated" style="padding:var(--sp-8);margin-bottom:var(--sp-8)">
+      <h3 style="font-size:var(--ts-xl);font-weight:800;margin-bottom:var(--sp-3)">Got your AI questions? Test them now!</h3>
+      <p style="color:var(--c-text-secondary);margin-bottom:var(--sp-6)">Paste the CSV or JSON output from the AI directly below to instantly start an exam with those questions.</p>
+      <div class="form-group" style="margin-bottom:var(--sp-5)">
+        <label class="form-label">Paste AI Output (CSV or JSON)</label>
+        <textarea class="textarea" id="ai-output-paste" placeholder="Paste the CSV or JSON questions generated by Gemini / ChatGPT here..." style="min-height:160px;font-family:var(--font-mono);font-size:var(--ts-sm)"></textarea>
+      </div>
+      <div style="display:flex;gap:var(--sp-3)">
+        <button class="btn btn-primary btn-lg" onclick="AITools.parseAndGo()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Parse & Start Exam
+        </button>
+        <button class="btn btn-secondary" onclick="AITools.parseOnly()">Validate Only</button>
+      </div>
+      <div class="parsed-preview hidden" id="ai-parsed-preview" style="margin-top:var(--sp-5)">
+        <div class="parsed-preview__header">
+          <div class="badge badge-success badge-dot">Parsed Successfully</div>
+        </div>
+        <div class="parsed-preview__stat-row">
+          <div class="parsed-stat"><div class="parsed-stat__val" id="ai-q-count">0</div><div class="parsed-stat__key">Questions</div></div>
+          <div class="parsed-stat"><div class="parsed-stat__val" id="ai-s-count">0</div><div class="parsed-stat__key">Sections</div></div>
+          <div class="parsed-stat"><div class="parsed-stat__val" id="ai-w-count">0</div><div class="parsed-stat__key">Warnings</div></div>
+        </div>
+      </div>
+      <div class="error-list hidden" id="ai-errors"><div class="error-list__title">Parse Errors</div><div id="ai-error-items"></div></div>
+    </div>
+
+    <!-- Tips -->
+    <div class="card" style="padding:var(--sp-6);border-color:var(--c-primary-soft)">
+      <h3 style="font-size:var(--ts-lg);font-weight:700;margin-bottom:var(--sp-5)">💡 Tips for Best Results</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4)">
+        <div class="rec-item"><div class="rec-item__icon">📌</div><div>Paste <strong>clear, well-structured text</strong> — NCERT chapters, newspaper summaries, handwritten notes work best.</div></div>
+        <div class="rec-item"><div class="rec-item__icon">🔢</div><div>Request <strong>30–50 questions</strong> per prompt for quality. Running multiple prompts is better than 100 in one go.</div></div>
+        <div class="rec-item"><div class="rec-item__icon">✅</div><div>Always <strong>double-check the correct answers</strong> before uploading. AI can occasionally make factual errors.</div></div>
+        <div class="rec-item"><div class="rec-item__icon">🏷️</div><div>Add a <strong>section name</strong> in the CSV so GovTPortal can group questions by topic for better analytics.</div></div>
+        <div class="rec-item"><div class="rec-item__icon">🌐</div><div>Use <strong>Gemini 2.0 Flash</strong> for free. For more advanced questions, GPT-4o works extremely well.</div></div>
+        <div class="rec-item"><div class="rec-item__icon">📁</div><div>Ask the AI to <strong>also send as a file</strong> — large outputs (100+ questions) are easier to download than copy.</div></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/core/store.js"></script>
+<script src="js/core/utils.js"></script>
+<script src="js/features/parser.js"></script>
+<script>
+const AITools = (function() {
+  initNavbarScroll();
+
+  const PROMPTS = {
+    upsc: (n, diff, fmt) => `HERE IS MY STUDY MATERIAL:
+
+[PASTE YOUR NCERT / NOTES / NEWSPAPER CONTENT HERE]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TASK: Generate ${n} MCQ questions for UPSC CSE Prelims General Studies Paper-1.
+
+REQUIREMENTS:
+• Each question must have exactly 4 options (A, B, C, D)
+• State the correct answer key (A/B/C/D)
+• Add a 1-2 sentence explanation for the correct answer
+• Topics: Indian History, Geography, Polity, Economy, Environment & Ecology, Science & Tech
+• Difficulty: ${diff === 'mixed' ? '30% Easy, 50% Medium, 20% Hard' : diff.charAt(0).toUpperCase() + diff.slice(1) + ' only'}
+• DOUBLE-CHECK every question and answer for factual accuracy before outputting
+• Questions must follow actual UPSC Prelims style — factual, tricky, no direct textbook recall
+
+OUTPUT FORMAT (${fmt.toUpperCase()}):
+${fmt === 'csv' || fmt === 'both' ? `
+id,question,optionA,optionB,optionC,optionD,correct,explanation,section,difficulty` : ''}
+${fmt === 'json' || fmt === 'both' ? `
+[{"id":1,"question":"...","options":{"A":"...","B":"...","C":"...","D":"..."},"correct":"A","explanation":"...","section":"History","difficulty":"Medium"}]` : ''}
+
+If you can attach a file, please do — and also paste the ${fmt.toUpperCase()} below.`,
+
+    ssc: (n, diff, fmt) => `HERE IS MY STUDY MATERIAL:
+
+[PASTE YOUR CONTENT HERE]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TASK: Generate ${n} MCQ questions for SSC CGL General Awareness Section.
+
+REQUIREMENTS:
+• Each question must have exactly 4 options (A, B, C, D)
+• State the correct answer (A/B/C/D)
+• Add a brief explanation
+• Topics: GK, Indian History, Geography, Polity, Science, Sports, Economy, Current Affairs
+• Difficulty: ${diff === 'mixed' ? '40% Easy, 40% Medium, 20% Hard' : diff}
+• SSC CGL difficulty level — not too deep like UPSC
+• VERIFY all facts before generating
+
+OUTPUT FORMAT (${fmt.toUpperCase()}):
+id,question,optionA,optionB,optionC,optionD,correct,explanation,section,difficulty`,
+
+    railway: (n, diff, fmt) => `HERE IS MY STUDY MATERIAL:
+
+[PASTE YOUR CONTENT HERE]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TASK: Generate ${n} MCQ questions for RRB Group D / NTPC exam.
+
+SUBJECT DISTRIBUTION:
+• 35% Mathematics (10th level: Percentage, Ratio, Profit/Loss, Time-Speed, Geometry, Algebra)
+• 30% Science (Physics, Chemistry, Biology — 10th NCERT level)
+• 25% General Awareness (History, Polity, Current Affairs, Railway GK)
+• 10% Reasoning
+
+REQUIREMENTS:
+• Each question has 4 options (A/B/C/D) with correct answer key
+• For Math: include step-by-step solution hint in explanation
+• DOUBLE-CHECK all calculations
+• Difficulty: ${diff}
+
+OUTPUT FORMAT (CSV):
+id,question,optionA,optionB,optionC,optionD,correct,explanation,section,difficulty`,
+
+    banking: (n, diff, fmt) => `HERE IS MY STUDY MATERIAL:
+
+[PASTE YOUR CONTENT HERE]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TASK: Generate ${n} MCQ questions for IBPS PO / Clerk exam preparation.
+
+SUBJECT DISTRIBUTION:
+• 30% Quantitative Aptitude (DI, Percentage, SI/CI, Profit/Loss, Mensuration)
+• 25% Reasoning (Puzzles, Syllogism, Blood Relations, Direction Sense)
+• 25% English (RC, Error Spotting, Sentence Rearrangement)
+• 20% General/Financial Awareness (Banking terms, Current Affairs, Economy)
+
+REQUIREMENTS:
+• 4 options (A/B/C/D), correct answer, explanation
+• For Quant & Reasoning: include detailed solution in explanation field
+• Difficulty: ${diff}
+• VERIFY all answers before generating
+
+OUTPUT FORMAT (CSV):
+id,question,optionA,optionB,optionC,optionD,correct,explanation,section,difficulty`,
+
+    custom: (n, diff, fmt) => `HERE IS MY STUDY MATERIAL:
+
+[PASTE YOUR STUDY MATERIAL / NOTES / CHAPTER HERE]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXAM: [SPECIFY YOUR EXAM NAME — e.g., State PSC, CLAT, GATE, etc.]
+
+TASK: Generate ${n} MCQ questions based on the study material above for my [EXAM NAME] exam.
+
+REQUIREMENTS:
+• Each question must have exactly 4 options (A, B, C, D)
+• State the correct answer key (A/B/C/D)
+• Add a 1-2 line explanation for the correct answer
+• Difficulty: ${diff === 'mixed' ? 'Mix of Easy, Medium and Hard' : diff}
+• DOUBLE-ANALYZE every question for errors, factual accuracy, and clarity before generating
+• Make questions match the actual exam pattern for [EXAM NAME]
+
+IF YOU ARE ABLE TO SEND A FILE — PLEASE SEND CSV OR JSON FILE
+ALSO PASTE THE OUTPUT IN THIS FORMAT:
+
+id,question,optionA,optionB,optionC,optionD,correct,explanation,section,difficulty`,
+  };
+
+  let currentExam = 'upsc';
+
+  function getPrompt() {
+    const n    = document.getElementById('ai-num-q').value;
+    const diff = document.getElementById('ai-diff').value;
+    const fmt  = document.getElementById('ai-format').value;
+    return PROMPTS[currentExam](n, diff, fmt);
+  }
+
+  function updatePrompt() {
+    document.getElementById('ai-prompt').value = getPrompt();
+  }
+
+  // Load format templates
+  document.getElementById('csv-template').textContent = Parser.CSV_TEMPLATE;
+  document.getElementById('json-template').textContent = Parser.JSON_TEMPLATE;
+
+  window.copyCSV  = () => copyText(Parser.CSV_TEMPLATE, 'CSV template copied!');
+  window.copyJSON = () => copyText(Parser.JSON_TEMPLATE, 'JSON template copied!');
+
+  // Init
+  updatePrompt();
+  document.getElementById('ai-num-q').addEventListener('change', updatePrompt);
+  document.getElementById('ai-diff').addEventListener('change', updatePrompt);
+  document.getElementById('ai-format').addEventListener('change', updatePrompt);
+
+  return {
+    loadPrompt: function(examKey) {
+      currentExam = examKey;
+      document.querySelectorAll('[data-exam]').forEach(b => b.classList.toggle('active', b.dataset.exam === examKey));
+      updatePrompt();
+    },
+    copyPrompt: function() {
+      copyText(document.getElementById('ai-prompt').value, 'Prompt copied! Paste in Gemini or ChatGPT →');
+    },
+    openGemini: function() {
+      copyText(document.getElementById('ai-prompt').value, '✅ Copied! Opening Gemini...');
+      setTimeout(() => window.open('https://gemini.google.com', '_blank'), 600);
+    },
+    openChatGPT: function() {
+      copyText(document.getElementById('ai-prompt').value, '✅ Copied! Opening ChatGPT...');
+      setTimeout(() => window.open('https://chatgpt.com', '_blank'), 600);
+    },
+    regenerate: updatePrompt,
+    parseAndGo: function() {
+      const raw = document.getElementById('ai-output-paste').value.trim();
+      if (!raw) { toast('Paste AI output first', 'warn'); return; }
+      const result = Parser.parse(raw);
+      if (!result.questions.length) {
+        toast('Could not parse questions. Check format.', 'danger');
+        return;
+      }
+      Store.setQuestions(result.questions);
+      Store.setConfig({ examTitle: currentExam.toUpperCase() + ' AI Generated Practice', source: 'ai' });
+      Store.clearExamState();
+      window.location.href = 'exam-lobby.html';
+    },
+    parseOnly: function() {
+      const raw = document.getElementById('ai-output-paste').value.trim();
+      if (!raw) { toast('Paste AI output first', 'warn'); return; }
+      const result = Parser.parse(raw);
+      const previewEl = document.getElementById('ai-parsed-preview');
+      const errEl     = document.getElementById('ai-errors');
+      const errItems  = document.getElementById('ai-error-items');
+
+      if (result.errors.length) {
+        errEl.classList.remove('hidden');
+        errItems.innerHTML = result.errors.map(e => `<div class="error-item">• ${e}</div>`).join('');
+      } else {
+        errEl.classList.add('hidden');
+      }
+      if (result.questions.length) {
+        document.getElementById('ai-q-count').textContent = result.questions.length;
+        document.getElementById('ai-s-count').textContent = Parser.getSections(result.questions).length;
+        document.getElementById('ai-w-count').textContent = result.warnings.length;
+        previewEl.classList.remove('hidden');
+        toast(`Parsed ${result.questions.length} questions — ready to use!`, 'success');
+      } else {
+        previewEl.classList.add('hidden');
+      }
+    },
+  };
+})();
+</script>
+</body>
+</html>

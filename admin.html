@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — GovTPortal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/setup.css">
+</head>
+<body>
+<nav class="navbar" id="main-nav">
+  <a href="index.html" class="navbar__logo">
+    <div class="navbar__logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="navbar__brand">Govt<span>Portal</span></span>
+  </a>
+  <nav class="navbar__links">
+    <a href="index.html" class="navbar__link">Home</a>
+    <a href="admin.html" class="navbar__link active">Admin</a>
+  </nav>
+  <div class="navbar__actions">
+    <button class="btn btn-ghost btn-sm" id="logout-btn" style="display:none" onclick="Admin.logout()">Logout</button>
+  </div>
+</nav>
+
+<!-- PIN LOCK SCREEN -->
+<div id="pin-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:var(--nav-h)">
+  <div class="card card-elevated" style="max-width:400px;width:100%;text-align:center;padding:var(--sp-10)">
+    <div style="width:56px;height:56px;background:var(--c-primary-soft);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto var(--sp-5)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <h1 style="font-size:var(--ts-2xl);font-weight:900;margin-bottom:var(--sp-2)">Admin Panel</h1>
+    <p style="color:var(--c-text-secondary);font-size:var(--ts-sm);margin-bottom:var(--sp-8)">Enter your admin PIN to continue</p>
+    <div class="form-group" style="text-align:left;margin-bottom:var(--sp-6)">
+      <label class="form-label">PIN</label>
+      <input type="password" class="input" id="pin-input" placeholder="Enter admin PIN" maxlength="6" autocomplete="off">
+      <span class="form-hint">Default PIN: <code style="font-family:var(--font-mono)">1234</code></span>
+    </div>
+    <div id="pin-error" style="color:var(--c-danger-light);font-size:var(--ts-sm);margin-bottom:var(--sp-4);display:none">Incorrect PIN. Try again.</div>
+    <button class="btn btn-primary w-full" onclick="Admin.verifyPin()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Unlock Admin Panel
+    </button>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<main id="admin-panel" style="display:none;padding-top:var(--nav-h);padding-bottom:var(--sp-16)">
+  <div class="container" style="max-width:1100px">
+
+    <!-- Header -->
+    <div style="padding:var(--sp-10) 0 var(--sp-8);display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-4)">
+      <div>
+        <h1 style="font-size:var(--ts-4xl);font-weight:900;letter-spacing:-0.03em;margin-bottom:var(--sp-2)">Admin <span class="gradient-text">Dashboard</span></h1>
+        <p style="color:var(--c-text-secondary)">Manage questions, papers and platform settings</p>
+      </div>
+      <div style="display:flex;gap:var(--sp-3)">
+        <button class="btn btn-secondary" onclick="Admin.exportAllData()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export All Data
+        </button>
+        <button class="btn btn-danger btn-sm" onclick="Admin.clearAllData()">Clear All Data</button>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4);margin-bottom:var(--sp-8)" id="admin-stats-row">
+      <div class="result-stat-card correct"><div class="result-stat-card__label">Total Questions</div><div class="result-stat-card__value correct-val" id="as-questions">—</div></div>
+      <div class="result-stat-card time"><div class="result-stat-card__label">Exams Saved</div><div class="result-stat-card__value time-val" id="as-results">—</div></div>
+      <div class="result-stat-card skipped"><div class="result-stat-card__label">Question Sets</div><div class="result-stat-card__value" id="as-sets">—</div></div>
+      <div class="result-stat-card wrong"><div class="result-stat-card__label">Storage Used</div><div class="result-stat-card__value wrong-val" id="as-storage">—</div></div>
+    </div>
+
+    <!-- Tab nav -->
+    <div class="tab-group" style="margin-bottom:var(--sp-6)" id="admin-tabs">
+      <button class="tab-btn active" data-panel="questions" onclick="Admin.showPanel('questions',this)">📋 Questions</button>
+      <button class="tab-btn" data-panel="upload" onclick="Admin.showPanel('upload',this)">⬆️ Upload Paper</button>
+      <button class="tab-btn" data-panel="results" onclick="Admin.showPanel('results',this)">📊 Results History</button>
+      <button class="tab-btn" data-panel="settings" onclick="Admin.showPanel('settings',this)">⚙️ Settings</button>
+    </div>
+
+    <!-- PANEL: Questions -->
+    <div class="admin-panel active" id="panel-questions">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3)">
+        <h2 style="font-size:var(--ts-xl);font-weight:800">Loaded Questions</h2>
+        <div style="display:flex;gap:var(--sp-3)">
+          <input type="text" class="input" id="q-search" placeholder="Search questions..." style="width:240px" oninput="Admin.searchQuestions()">
+          <button class="btn btn-danger btn-sm" onclick="Admin.clearQuestions()">Clear</button>
+        </div>
+      </div>
+      <div class="q-table-wrap">
+        <div class="q-table-scroll" style="max-height:500px">
+          <table class="table" id="admin-q-table">
+            <thead>
+              <tr><th>#</th><th>Question</th><th>A</th><th>B</th><th>C</th><th>D</th><th>Ans</th><th>Section</th><th>Difficulty</th></tr>
+            </thead>
+            <tbody id="admin-q-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL: Upload -->
+    <div class="admin-panel" id="panel-upload" style="display:none">
+      <h2 style="font-size:var(--ts-xl);font-weight:800;margin-bottom:var(--sp-2)">Upload a Question Paper</h2>
+      <p style="color:var(--c-text-secondary);margin-bottom:var(--sp-6)">Upload a new question set and save it as a named paper in the platform library.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5);margin-bottom:var(--sp-6)">
+        <div class="form-group">
+          <label class="form-label">Paper Title</label>
+          <input type="text" class="input" id="upload-title" placeholder="e.g. UPSC Prelims Mock 2025">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="input select" id="upload-cat">
+            <option>UPSC</option><option>SSC</option><option>Railway</option><option>Banking</option><option>Custom</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Year</label>
+          <input type="number" class="input" id="upload-year" value="2025" min="2000" max="2030">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Difficulty</label>
+          <select class="input select" id="upload-diff">
+            <option>Easy</option><option selected>Medium</option><option>Hard</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="drop-zone" id="upload-drop">
+        <input type="file" id="upload-file" accept=".csv,.json,.txt">
+        <div class="drop-zone__icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="drop-zone__title">Drop CSV or JSON file</div>
+        <p class="drop-zone__hint">or click to browse</p>
+      </div>
+
+      <div class="form-group" style="margin-top:var(--sp-5)">
+        <label class="form-label">Or paste CSV/JSON</label>
+        <textarea class="textarea" id="upload-paste" style="min-height:160px;font-family:var(--font-mono);font-size:var(--ts-sm)"></textarea>
+      </div>
+
+      <div class="parsed-preview hidden" id="upload-preview" style="margin-bottom:var(--sp-5)">
+        <div class="parsed-preview__stat-row">
+          <div class="parsed-stat"><div class="parsed-stat__val" id="up-count">0</div><div class="parsed-stat__key">Questions</div></div>
+          <div class="parsed-stat"><div class="parsed-stat__val" id="up-sections">0</div><div class="parsed-stat__key">Sections</div></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:var(--sp-3)">
+        <button class="btn btn-secondary" onclick="Admin.parseUpload()">Parse & Preview</button>
+        <button class="btn btn-primary" onclick="Admin.saveUploadedPaper()">Save Paper to Library</button>
+      </div>
+    </div>
+
+    <!-- PANEL: Results History -->
+    <div class="admin-panel" id="panel-results" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5)">
+        <h2 style="font-size:var(--ts-xl);font-weight:800">Results History</h2>
+        <button class="btn btn-danger btn-sm" onclick="Admin.clearResults()">Clear All Results</button>
+      </div>
+      <div class="q-table-wrap">
+        <div class="q-table-scroll" style="max-height:500px">
+          <table class="table" id="results-table">
+            <thead>
+              <tr>
+                <th>Date</th><th>Exam</th><th>Candidate</th>
+                <th>Score</th><th>Accuracy</th><th>Time</th><th>Grade</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL: Settings -->
+    <div class="admin-panel" id="panel-settings" style="display:none">
+      <h2 style="font-size:var(--ts-xl);font-weight:800;margin-bottom:var(--sp-6)">Platform Settings</h2>
+
+      <div class="settings-list" style="max-width:600px">
+        <div class="settings-item">
+          <div class="settings-item__left">
+            <div class="settings-item__title">Admin PIN</div>
+            <div class="settings-item__desc">Change the admin panel access PIN (min 4 digits)</div>
+          </div>
+          <div style="display:flex;gap:var(--sp-2)">
+            <input type="password" class="input" id="new-pin" placeholder="New PIN" style="width:120px" maxlength="8">
+            <button class="btn btn-secondary btn-sm" onclick="Admin.changePin()">Save</button>
+          </div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item__left">
+            <div class="settings-item__title">Default Marks (Correct)</div>
+            <div class="settings-item__desc">Default positive marks per correct answer</div>
+          </div>
+          <input type="number" class="input" id="def-correct" value="4" min="1" step="0.5" style="width:80px">
+        </div>
+        <div class="settings-item">
+          <div class="settings-item__left">
+            <div class="settings-item__title">Default Negative Marks</div>
+            <div class="settings-item__desc">Default marks deducted for wrong answers</div>
+          </div>
+          <input type="number" class="input" id="def-neg" value="1" min="0" step="0.25" style="width:80px">
+        </div>
+        <div class="settings-item">
+          <div class="settings-item__left">
+            <div class="settings-item__title">Violation Limit</div>
+            <div class="settings-item__desc">Number of anti-cheat violations before auto-submit</div>
+          </div>
+          <input type="number" class="input" id="def-violations" value="3" min="1" max="10" style="width:80px">
+        </div>
+        <div class="settings-item">
+          <div class="settings-item__left">
+            <div class="settings-item__title">Warning Threshold</div>
+            <div class="settings-item__desc">Timer % remaining when red warning appears</div>
+          </div>
+          <input type="number" class="input" id="def-warn-pct" value="15" min="5" max="50" style="width:80px">
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="margin-top:var(--sp-6)" onclick="Admin.saveSettings()">Save Settings</button>
+
+      <div style="margin-top:var(--sp-10);padding-top:var(--sp-6);border-top:1px solid var(--c-border)">
+        <h3 style="font-size:var(--ts-lg);font-weight:700;color:var(--c-danger-light);margin-bottom:var(--sp-4)">Danger Zone</h3>
+        <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
+          <button class="btn btn-danger" onclick="Admin.clearQuestions()">Clear All Questions</button>
+          <button class="btn btn-danger" onclick="Admin.clearResults()">Clear All Results</button>
+          <button class="btn btn-danger" onclick="Admin.clearAllData()">Reset Everything</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div id="toast-container" class="toast-container"></div>
+
+<script src="js/core/store.js"></script>
+<script src="js/core/utils.js"></script>
+<script src="js/features/parser.js"></script>
+<script src="js/data/sample-papers.js"></script>
+<script>
+window.Admin = (function() {
+  const ADMIN_PIN_KEY = 'GTP_ADMIN_PIN';
+  let isUnlocked = false;
+  let allQuestions = [];
+  let uploadedQuestions = [];
+
+  const getPin = () => localStorage.getItem(ADMIN_PIN_KEY) || '1234';
+
+  initNavbarScroll();
+
+  // ── PIN ──
+  document.getElementById('pin-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') Admin.verifyPin();
+  });
+
+  function unlock() {
+    isUnlocked = true;
+    document.getElementById('pin-screen').style.display = 'none';
+    document.getElementById('admin-panel').style.display = '';
+    document.getElementById('logout-btn').style.display = '';
+    refreshStats();
+    loadQuestionsPanel();
+    loadResultsPanel();
+  }
+
+  function refreshStats() {
+    const qs = Store.getQuestions();
+    const results = Store.getAllResults ? Store.getAllResults() : [];
+    const keys = Object.keys(localStorage).filter(k => k.startsWith('GTP_'));
+    const storage = keys.reduce((sum, k) => sum + (localStorage.getItem(k) || '').length, 0);
+
+    document.getElementById('as-questions').textContent = qs.length;
+    document.getElementById('as-results').textContent   = results.length;
+    document.getElementById('as-sets').textContent      = SAMPLE_PAPERS.length;
+    document.getElementById('as-storage').textContent   = (storage / 1024).toFixed(1) + ' KB';
+  }
+
+  function loadQuestionsPanel() {
+    allQuestions = Store.getQuestions();
+    renderQTable(allQuestions);
+  }
+
+  function renderQTable(qs) {
+    const tbody = document.getElementById('admin-q-body');
+    if (!qs.length) {
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:var(--sp-8);color:var(--c-text-tertiary)">No questions loaded. <a href="exam-setup.html" style="color:var(--c-primary)">Upload in Exam Setup</a></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = qs.map((q, i) => `
+      <tr>
+        <td style="font-family:var(--font-mono);font-size:var(--ts-xs)">${i+1}</td>
+        <td style="font-size:var(--ts-xs);max-width:300px;white-space:normal">${q.question.length > 80 ? q.question.slice(0,80)+'…' : q.question}</td>
+        <td style="font-size:var(--ts-xs)">${(q.options&&q.options.A)||''}</td>
+        <td style="font-size:var(--ts-xs)">${(q.options&&q.options.B)||''}</td>
+        <td style="font-size:var(--ts-xs)">${(q.options&&q.options.C)||''}</td>
+        <td style="font-size:var(--ts-xs)">${(q.options&&q.options.D)||''}</td>
+        <td style="text-align:center"><span class="badge badge-success">${q.correct||'?'}</span></td>
+        <td style="font-size:var(--ts-xs)">${q.section||'—'}</td>
+        <td style="font-size:var(--ts-xs)">${q.difficulty||'—'}</td>
+      </tr>`).join('');
+  }
+
+  function loadResultsPanel() {
+    const results = Store.getAllResults ? Store.getAllResults() : [];
+    const tbody   = document.getElementById('results-body');
+    if (!results.length) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:var(--sp-8);color:var(--c-text-tertiary)">No exam results saved yet.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = results.map((r, i) => `
+      <tr>
+        <td style="font-size:var(--ts-xs);font-family:var(--font-mono)">${r.endTime ? new Date(r.endTime).toLocaleString('en-IN') : '—'}</td>
+        <td style="font-size:var(--ts-sm);font-weight:600">${r.examTitle || '—'}</td>
+        <td style="font-size:var(--ts-sm)">${r.candidateName || '—'}</td>
+        <td style="font-size:var(--ts-sm)">${r.score || 0} / ${r.totalMarks || '—'}</td>
+        <td style="font-size:var(--ts-sm)">${r.accuracy || 0}%</td>
+        <td style="font-size:var(--ts-sm);font-family:var(--font-mono)">${formatTime(r.timeTaken || 0)}</td>
+        <td><span class="badge badge-${r.grade==='A+'||r.grade==='A'?'success':r.grade==='F'?'danger':'info'}">${r.grade || '—'}</span></td>
+        <td>
+          <button class="btn btn-ghost btn-xs" onclick="Admin.viewResult(${i})">View</button>
+          <button class="btn btn-danger btn-xs" onclick="Admin.deleteResult(${i})">Del</button>
+        </td>
+      </tr>`).join('');
+  }
+
+  // Handle upload drop zone
+  const dropEl = document.getElementById('upload-drop');
+  const fileEl = document.getElementById('upload-file');
+  dropEl.addEventListener('dragover', e => { e.preventDefault(); dropEl.classList.add('drag-over'); });
+  dropEl.addEventListener('dragleave', () => dropEl.classList.remove('drag-over'));
+  dropEl.addEventListener('drop', e => {
+    e.preventDefault(); dropEl.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) readUploadFile(e.dataTransfer.files[0]);
+  });
+  fileEl.addEventListener('change', () => { if (fileEl.files[0]) readUploadFile(fileEl.files[0]); });
+
+  function readUploadFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('upload-paste').value = e.target.result;
+    };
+    reader.readAsText(file);
+  }
+
+  return {
+    verifyPin: function() {
+      const input = document.getElementById('pin-input').value;
+      if (input === getPin()) {
+        document.getElementById('pin-error').style.display = 'none';
+        unlock();
+      } else {
+        document.getElementById('pin-error').style.display = '';
+        document.getElementById('pin-input').value = '';
+        document.getElementById('pin-input').focus();
+      }
+    },
+
+    logout: function() {
+      isUnlocked = false;
+      document.getElementById('admin-panel').style.display = 'none';
+      document.getElementById('pin-screen').style.display = 'flex';
+      document.getElementById('logout-btn').style.display = 'none';
+      document.getElementById('pin-input').value = '';
+    },
+
+    showPanel: function(name, btn) {
+      document.querySelectorAll('.admin-panel').forEach(p => p.style.display = 'none');
+      document.getElementById('panel-' + name).style.display = '';
+      document.querySelectorAll('[data-panel]').forEach(b => b.classList.toggle('active', b.dataset.panel === name));
+      if (name === 'results') loadResultsPanel();
+      if (name === 'questions') loadQuestionsPanel();
+    },
+
+    searchQuestions: function() {
+      const q = document.getElementById('q-search').value.toLowerCase();
+      const filtered = allQuestions.filter(x => x.question.toLowerCase().includes(q) || (x.section||'').toLowerCase().includes(q));
+      renderQTable(filtered);
+    },
+
+    clearQuestions: function() {
+      if (!confirm('Clear all loaded questions?')) return;
+      Store.clearQuestions();
+      allQuestions = [];
+      renderQTable([]);
+      refreshStats();
+      toast('Questions cleared', 'success');
+    },
+
+    parseUpload: function() {
+      const raw = document.getElementById('upload-paste').value.trim();
+      if (!raw) { toast('Paste content first', 'warn'); return; }
+      const result = Parser.parse(raw);
+      if (!result.questions.length) { toast('No questions found', 'danger'); return; }
+      uploadedQuestions = result.questions;
+      document.getElementById('up-count').textContent    = result.questions.length;
+      document.getElementById('up-sections').textContent = Parser.getSections(result.questions).length;
+      document.getElementById('upload-preview').classList.remove('hidden');
+      toast(`Parsed ${result.questions.length} questions`, 'success');
+    },
+
+    saveUploadedPaper: function() {
+      if (!uploadedQuestions.length) { toast('Parse questions first', 'warn'); return; }
+      const title = document.getElementById('upload-title').value.trim() || 'Custom Paper';
+      const paper = {
+        id:             'custom_' + Date.now(),
+        title,
+        category:       document.getElementById('upload-cat').value,
+        subcategory:    '',
+        year:           parseInt(document.getElementById('upload-year').value) || 2025,
+        difficulty:     document.getElementById('upload-diff').value,
+        totalQuestions: uploadedQuestions.length,
+        duration:       Math.round(uploadedQuestions.length * 1.5),
+        marksCorrect:   4,
+        marksNegative:  1,
+        color:          '#5b5bd6',
+        questions:      uploadedQuestions,
+      };
+      // Save to Store custom papers
+      const existing = JSON.parse(localStorage.getItem('GTP_CUSTOM_PAPERS') || '[]');
+      existing.push(paper);
+      localStorage.setItem('GTP_CUSTOM_PAPERS', JSON.stringify(existing));
+      Store.setQuestions(uploadedQuestions);
+      Store.setConfig({ examTitle: title, duration: paper.duration, source: 'admin' });
+      refreshStats();
+      toast(`"${title}" saved and loaded!`, 'success');
+    },
+
+    viewResult: function(idx) {
+      const results = Store.getAllResults ? Store.getAllResults() : [];
+      if (!results[idx]) return;
+      Store.saveResult(results[idx]);
+      window.location.href = 'result.html';
+    },
+
+    deleteResult: function(idx) {
+      if (!confirm('Delete this result?')) return;
+      if (Store.deleteResult) {
+        Store.deleteResult(idx);
+        loadResultsPanel();
+        refreshStats();
+        toast('Result deleted', 'success');
+      }
+    },
+
+    clearResults: function() {
+      if (!confirm('Clear ALL result history? This cannot be undone.')) return;
+      if (Store.clearAllResults) Store.clearAllResults();
+      else localStorage.removeItem('GTP_RESULTS');
+      loadResultsPanel();
+      refreshStats();
+      toast('All results cleared', 'success');
+    },
+
+    exportAllData: function() {
+      const data = {
+        questions:  Store.getQuestions(),
+        config:     Store.getConfig(),
+        results:    Store.getAllResults ? Store.getAllResults() : [],
+        exportedAt: new Date().toISOString(),
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'govtportal-backup-' + Date.now() + '.json';
+      a.click();
+      toast('Data exported!', 'success');
+    },
+
+    clearAllData: function() {
+      if (!confirm('RESET EVERYTHING? All questions, results and settings will be wiped.')) return;
+      Object.keys(localStorage).filter(k => k.startsWith('GTP_')).forEach(k => localStorage.removeItem(k));
+      toast('All data cleared', 'success');
+      setTimeout(() => window.location.reload(), 1000);
+    },
+
+    changePin: function() {
+      const p = document.getElementById('new-pin').value.trim();
+      if (!p || p.length < 4) { toast('PIN must be at least 4 characters', 'warn'); return; }
+      localStorage.setItem(ADMIN_PIN_KEY, p);
+      document.getElementById('new-pin').value = '';
+      toast('PIN updated successfully', 'success');
+    },
+
+    saveSettings: function() {
+      const settings = {
+        marksCorrect:   parseFloat(document.getElementById('def-correct').value) || 4,
+        marksNegative:  parseFloat(document.getElementById('def-neg').value)     || 1,
+        violationLimit: parseInt(document.getElementById('def-violations').value) || 3,
+        warnThreshold:  parseInt(document.getElementById('def-warn-pct').value)   || 15,
+      };
+      Store.setConfig(settings);
+      toast('Settings saved!', 'success');
+    },
+  };
+})();
+</script>
+</body>
+</html>

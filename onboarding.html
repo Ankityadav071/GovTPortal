@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How it Works — GovTPortal</title>
+<meta name="description" content="Learn how GovTPortal's CBT platform works — from uploading questions to analyzing results.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/setup.css">
+</head>
+<body>
+<nav class="navbar" id="main-nav">
+  <a href="index.html" class="navbar__logo">
+    <div class="navbar__logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    </div>
+    <span class="navbar__brand">Govt<span>Portal</span></span>
+  </a>
+  <nav class="navbar__links">
+    <a href="index.html" class="navbar__link">Home</a>
+    <a href="onboarding.html" class="navbar__link active">How it Works</a>
+    <a href="ai-tools.html" class="navbar__link">AI Tools</a>
+    <a href="admin.html" class="navbar__link">Admin</a>
+  </nav>
+  <div class="navbar__actions">
+    <a href="exam-setup.html" class="btn btn-primary btn-sm">Start Exam</a>
+  </div>
+</nav>
+
+<main class="onboarding-page">
+  <div class="onboarding-container">
+
+    <!-- Hero -->
+    <div class="onboarding-hero reveal">
+      <div class="badge badge-primary badge-dot" style="margin-bottom:var(--sp-5)">Platform Guide</div>
+      <h1 class="onboarding-hero__title">
+        Your Complete<br>
+        <span class="gradient-text">Exam Prep Guide</span>
+      </h1>
+      <p class="onboarding-hero__desc">From uploading questions to analyzing results — here's how GovTPortal works.</p>
+    </div>
+
+    <!-- Feature highlights -->
+    <div class="feature-highlight-grid stagger">
+      <div class="card card-accent-left" style="--tw-border-l-color:var(--c-primary)">
+        <div class="badge badge-primary" style="margin-bottom:var(--sp-3)">Free Forever</div>
+        <div style="font-size:var(--ts-lg);font-weight:700;margin-bottom:var(--sp-2)">No Login, No Payment</div>
+        <p style="color:var(--c-text-secondary);font-size:var(--ts-sm)">GovTPortal is 100% free with no account required. Start practicing instantly.</p>
+      </div>
+      <div class="card card-accent-left" style="border-left-color:var(--c-success)">
+        <div class="badge badge-success" style="margin-bottom:var(--sp-3)">80+ Questions</div>
+        <div style="font-size:var(--ts-lg);font-weight:700;margin-bottom:var(--sp-2)">Pre-loaded Mock Papers</div>
+        <p style="color:var(--c-text-secondary);font-size:var(--ts-sm)">UPSC, SSC, Railway and Banking mock papers ready to attempt right now.</p>
+      </div>
+      <div class="card card-accent-left" style="border-left-color:var(--c-accent)">
+        <div class="badge badge-accent" style="margin-bottom:var(--sp-3)">AI Powered</div>
+        <div style="font-size:var(--ts-lg);font-weight:700;margin-bottom:var(--sp-2)">Generate Your Own Questions</div>
+        <p style="color:var(--c-text-secondary);font-size:var(--ts-sm)">Use built-in prompts with Gemini or ChatGPT to create questions from your notes.</p>
+      </div>
+      <div class="card card-accent-left" style="border-left-color:var(--c-info)">
+        <div class="badge badge-info" style="margin-bottom:var(--sp-3)">Real CBT Interface</div>
+        <div style="font-size:var(--ts-lg);font-weight:700;margin-bottom:var(--sp-2)">Matches Actual Exam UI</div>
+        <p style="color:var(--c-text-secondary);font-size:var(--ts-sm)">Same layout as TCS iON — section tabs, question grid, timer, anti-cheat.</p>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="onboarding-step-row">
+
+      <!-- Step 1 -->
+      <div class="onboarding-step reveal">
+        <div>
+          <div class="onboarding-step__badge">
+            <span style="font-size:var(--ts-xl); background: var(--c-primary-soft); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;">1</span>
+            Step One
+          </div>
+          <h2 class="onboarding-step__title">Select a Paper or Upload Your Own</h2>
+          <p class="onboarding-step__desc">Choose from 4 free mock papers on the homepage, or upload your own questions in CSV or JSON format using the exam setup wizard.</p>
+          <div class="onboarding-step__checklist">
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              UPSC, SSC, Railway, Banking mock papers ready
+            </div>
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Drag-and-drop CSV or JSON upload
+            </div>
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              AI prompt to generate questions via Gemini/ChatGPT
+            </div>
+          </div>
+        </div>
+        <div class="onboarding-step__visual">
+          <div style="width:100%;max-width:320px">
+            <div class="card card-elevated" style="padding:var(--sp-4)">
+              <div style="font-size:var(--ts-xs);font-weight:700;color:var(--c-primary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:var(--sp-3)">UPSC — CSE</div>
+              <div style="font-size:var(--ts-md);font-weight:700;margin-bottom:var(--sp-3)">UPSC CSE Prelims GS-1 Mock 2024</div>
+              <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap;margin-bottom:var(--sp-4)">
+                <span class="badge badge-neutral">⏱ 60 min</span>
+                <span class="badge badge-neutral">✏ 25 Questions</span>
+                <span class="badge badge-danger">Hard</span>
+              </div>
+              <button class="btn btn-primary w-full btn-sm">Start Exam →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="onboarding-step reveal">
+        <div>
+          <div class="onboarding-step__badge">
+            <span style="font-size:var(--ts-xl); background: var(--c-info-soft); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--c-info);">2</span>
+            Step Two
+          </div>
+          <h2 class="onboarding-step__title">Configure Your Exam Settings</h2>
+          <p class="onboarding-step__desc">Set timer duration, marks scheme (positive + negative marking), toggle anti-cheat, enable calculator, and configure keyboard shortcuts.</p>
+          <div class="onboarding-step__checklist">
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Timer and marking scheme
+            </div>
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Anti-cheat, calculator toggle
+            </div>
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Enter candidate name and review summary
+            </div>
+          </div>
+        </div>
+        <div class="onboarding-step__visual">
+          <div style="width:100%;max-width:300px;display:flex;flex-direction:column;gap:var(--sp-4)">
+            <div class="settings-item" style="padding:var(--sp-3) 0;border-bottom:1px solid var(--c-border)">
+              <div class="settings-item__left">
+                <div class="settings-item__title">Anti-Cheat</div>
+                <div style="font-size:var(--ts-xs);color:var(--c-text-tertiary)">Tab switch + fullscreen</div>
+              </div>
+              <div style="display:flex;align-items:center">
+                <label class="toggle"><input type="checkbox" checked><div class="toggle__track"><div class="toggle__thumb"></div></div></label>
+              </div>
+            </div>
+            <div class="settings-item" style="padding:var(--sp-3) 0;border-bottom:1px solid var(--c-border)">
+              <div class="settings-item__left">
+                <div class="settings-item__title">Calculator</div>
+                <div style="font-size:var(--ts-xs);color:var(--c-text-tertiary)">Scientific calculator overlay</div>
+              </div>
+              <div>
+                <label class="toggle"><input type="checkbox"><div class="toggle__track"><div class="toggle__thumb"></div></div></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="onboarding-step reveal">
+        <div>
+          <div class="onboarding-step__badge">
+            <span style="font-size:var(--ts-xl); background: var(--c-success-soft); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--c-success-light);">3</span>
+            Step Three
+          </div>
+          <h2 class="onboarding-step__title">Attempt the Exam in Real CBT Mode</h2>
+          <p class="onboarding-step__desc">Experience the exact TCS iON-style interface. Two-pane layout — question on left, navigation panel on right. Use keyboard shortcuts for speed.</p>
+          <div class="onboarding-step__checklist">
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Keys A/B/C/D to select options
+            </div>
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              N=Next, P=Previous, M=Mark for Review
+            </div>
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Color-coded question grid navigation
+            </div>
+          </div>
+        </div>
+        <div class="onboarding-step__visual">
+          <div style="width:100%;max-width:320px">
+            <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap">
+              <div class="q-btn answered">1</div>
+              <div class="q-btn answered">2</div>
+              <div class="q-btn current">3</div>
+              <div class="q-btn marked">4</div>
+              <div class="q-btn not-visited">5</div>
+              <div class="q-btn not-visited">6</div>
+              <div class="q-btn answered">7</div>
+              <div class="q-btn marked-answered">8</div>
+              <div class="q-btn">9</div>
+              <div class="q-btn">10</div>
+            </div>
+            <div class="q-legend">
+              <div class="q-legend-item"><div class="q-legend-dot" style="background:var(--c-success)"></div>Answered</div>
+              <div class="q-legend-item"><div class="q-legend-dot" style="background:var(--c-warn)"></div>Marked</div>
+              <div class="q-legend-item"><div class="q-legend-dot" style="background:var(--c-accent)"></div>Marked+Ans</div>
+              <div class="q-legend-item"><div class="q-legend-dot" style="background:var(--c-bg-overlay)"></div>Not Visited</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="onboarding-step reveal">
+        <div>
+          <div class="onboarding-step__badge">
+            <span style="font-size:var(--ts-xl); background: var(--c-accent-soft); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--c-accent);">4</span>
+            Step Four
+          </div>
+          <h2 class="onboarding-step__title">Analyze Results & Export PDF</h2>
+          <p class="onboarding-step__desc">Get a detailed breakdown — score, accuracy, section-wise performance, per-question time heatmap and weak areas. Export as a professional PDF report.</p>
+          <div class="onboarding-step__checklist">
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Score, accuracy, attempt rate, grade
+            </div>
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Section-wise chart, time heatmap
+            </div>
+            <div class="onboarding-check">
+              <div class="onboarding-check__icon"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#22c96e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              PDF export + save to GovTPortal history
+            </div>
+          </div>
+        </div>
+        <div class="onboarding-step__visual">
+          <div style="width:100%;max-width:280px">
+            <div class="result-stat-card correct" style="margin-bottom:8px">
+              <div class="result-stat-card__label">Correct Answers</div>
+              <div class="result-stat-card__value correct-val">18</div>
+              <div class="result-stat-card__sub">+72 Marks</div>
+            </div>
+            <div class="result-stat-card wrong">
+              <div class="result-stat-card__label">Wrong Answers</div>
+              <div class="result-stat-card__value" style="color:var(--c-danger-light)">4</div>
+              <div class="result-stat-card__sub">-4 Marks (Negative)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="onboarding-cta reveal">
+      <h2 class="onboarding-cta__title">Ready to Begin?</h2>
+      <p class="onboarding-cta__desc">Start with a free paper or upload your own questions and practice right now.</p>
+      <div class="onboarding-cta__actions">
+        <a href="index.html#papers" class="btn btn-primary btn-xl">Browse Free Papers</a>
+        <a href="exam-setup.html" class="btn btn-secondary btn-xl">Upload Questions</a>
+        <a href="ai-tools.html" class="btn btn-glass btn-xl">Try AI Generator</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="js/core/utils.js"></script>
+<script>
+  initNavbarScroll();
+  initReveal();
+</script>
+</body>
+</html>

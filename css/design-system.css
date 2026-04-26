@@ -1,0 +1,236 @@
+/* ============================================================
+   GovTPortal v2 — Design System
+   Core tokens, resets, utilities, animations
+   ============================================================ */
+
+/* ── Google Font ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── CSS Custom Properties ── */
+:root {
+  /* Palette — Dark Mode First */
+  --c-bg-base:       #0d0f14;
+  --c-bg-elevated:   #141720;
+  --c-bg-surface:    #181b26;
+  --c-bg-overlay:    #1e2235;
+
+  /* Primary — Electric Indigo */
+  --c-primary:       #5b5bd6;
+  --c-primary-light: #7c7ce8;
+  --c-primary-soft:  rgba(91,91,214,0.12);
+
+  /* Accent — Amber */
+  --c-accent:        #f59e0b;
+  --c-accent-soft:   rgba(245,158,11,0.12);
+
+  /* Success */
+  --c-success:       #16a34a;
+  --c-success-light: #22c96e;
+  --c-success-soft:  rgba(34,201,110,0.1);
+
+  /* Danger */
+  --c-danger:        #e03e3e;
+  --c-danger-light:  #f87171;
+  --c-danger-soft:   rgba(224,62,62,0.1);
+
+  /* Warning */
+  --c-warn:          #f59e0b;
+  --c-warn-soft:     rgba(245,158,11,0.1);
+
+  /* Info */
+  --c-info:          #38bdf8;
+  --c-info-soft:     rgba(56,189,248,0.1);
+
+  /* Text */
+  --c-text-primary:   #e8eaf6;
+  --c-text-secondary: #9ba3c2;
+  --c-text-tertiary:  #5c6480;
+
+  /* Borders */
+  --c-border:        rgba(255,255,255,0.07);
+  --c-border-strong: rgba(255,255,255,0.14);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* Type Scale */
+  --ts-xs:   0.72rem;
+  --ts-sm:   0.82rem;
+  --ts-base: 0.9rem;
+  --ts-md:   1rem;
+  --ts-lg:   1.125rem;
+  --ts-xl:   1.25rem;
+  --ts-2xl:  1.5rem;
+  --ts-3xl:  1.875rem;
+  --ts-4xl:  2.25rem;
+  --ts-5xl:  3rem;
+
+  /* Spacing (4px base) */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+  --sp-12: 48px; --sp-14: 56px; --sp-16: 64px;
+
+  /* Radius */
+  --r-xs:   3px;
+  --r-sm:   6px;
+  --r-md:   8px;
+  --r-lg:   12px;
+  --r-xl:   16px;
+  --r-2xl:  20px;
+  --r-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.45);
+  --shadow-lg:  0 8px 32px rgba(0,0,0,0.55);
+  --shadow-xl:  0 16px 48px rgba(0,0,0,0.65);
+  --shadow-glow: 0 0 40px rgba(91,91,214,0.25);
+
+  /* Transitions */
+  --t-fast:   0.15s;
+  --t-base:   0.25s;
+  --t-slow:   0.4s;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Navbar height */
+  --nav-h: 60px;
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--c-bg-base);
+  color: var(--c-text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+img, svg { display: block; max-width: 100%; }
+ul, ol { list-style: none; }
+input, textarea, select { font-family: inherit; }
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--c-text-primary);
+}
+p { color: var(--c-text-secondary); }
+code, pre {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: var(--c-accent);
+}
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--c-text-secondary);
+}
+
+/* ── GRADIENT TEXT ── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--c-primary-light), var(--c-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── CONTAINER ── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 var(--sp-6); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--c-bg-elevated); }
+::-webkit-scrollbar-thumb { background: rgba(91,91,214,0.35); border-radius: var(--r-full); }
+::-webkit-scrollbar-thumb:hover { background: var(--c-primary); }
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+.stagger { opacity: 0; transform: translateY(20px); transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out); }
+.stagger.visible { opacity: 1; transform: none; }
+.stagger.visible > * { animation: staggerIn 0.4s var(--ease-out) both; }
+.stagger.visible > *:nth-child(1) { animation-delay: 0ms; }
+.stagger.visible > *:nth-child(2) { animation-delay: 80ms; }
+.stagger.visible > *:nth-child(3) { animation-delay: 160ms; }
+.stagger.visible > *:nth-child(4) { animation-delay: 240ms; }
+.stagger.visible > *:nth-child(5) { animation-delay: 320ms; }
+.stagger.visible > *:nth-child(6) { animation-delay: 400ms; }
+.stagger.visible > *:nth-child(n+7) { animation-delay: 480ms; }
+
+/* ── KEYFRAMES ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes staggerIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-8px); }
+  40%       { transform: translateX(8px); }
+  60%       { transform: translateX(-6px); }
+  80%       { transform: translateX(6px); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes tickerScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+/* ── UTILITY ── */
+.hidden  { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+.w-full  { width: 100%; }
+.text-center { text-align: center; }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.gap-3 { gap: var(--sp-3); }
+.gap-4 { gap: var(--sp-4); }
+.mt-4 { margin-top: var(--sp-4); }
+.mb-4 { margin-bottom: var(--sp-4); }
+
+/* ── PROGRESS RING ── (for timer) */
+.progress-ring__bg   { fill: none; stroke: rgba(255,255,255,0.07); }
+.progress-ring__fill {
+  fill: none;
+  stroke: var(--c-primary);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke 0.5s;
+}
