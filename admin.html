@@ -4,10 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel — GovTPortal</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/setup.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <nav class="navbar" id="main-nav">
@@ -95,7 +96,7 @@
         <div class="q-table-scroll" style="max-height:500px">
           <table class="table" id="admin-q-table">
             <thead>
-              <tr><th>#</th><th>Question</th><th>A</th><th>B</th><th>C</th><th>D</th><th>Ans</th><th>Section</th><th>Difficulty</th></tr>
+              <tr><th>#</th><th>Question</th><th>A</th><th>B</th><th>C</th><th>D</th><th>Ans</th><th>Section</th><th>Difficulty</th><th>Actions</th></tr>
             </thead>
             <tbody id="admin-q-body"></tbody>
           </table>
@@ -163,6 +164,9 @@
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5)">
         <h2 style="font-size:var(--ts-xl);font-weight:800">Results History</h2>
         <button class="btn btn-danger btn-sm" onclick="Admin.clearResults()">Clear All Results</button>
+      </div>
+      <div style="background:var(--c-bg-surface); padding:var(--sp-4); border-radius:var(--r-md); border:1px solid var(--c-border); margin-bottom:var(--sp-6);">
+        <canvas id="admin-chart" height="80"></canvas>
       </div>
       <div class="q-table-wrap">
         <div class="q-table-scroll" style="max-height:500px">
@@ -291,10 +295,27 @@ window.Admin = (function() {
   function renderQTable(qs) {
     const tbody = document.getElementById('admin-q-body');
     if (!qs.length) {
-      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:var(--sp-8);color:var(--c-text-tertiary)">No questions loaded. <a href="exam-setup.html" style="color:var(--c-primary)">Upload in Exam Setup</a></td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:var(--sp-8);color:var(--c-text-tertiary)">No questions loaded. <a href="exam-setup.html" style="color:var(--c-primary)">Upload in Exam Setup</a></td></tr>`;
       return;
     }
-    tbody.innerHTML = qs.map((q, i) => `
+    const editingIdx = window._editingQIdx;
+    tbody.innerHTML = qs.map((q, i) => {
+      if (editingIdx === i) {
+        return `
+        <tr style="background:var(--c-bg-overlay)">
+          <td style="font-family:var(--font-mono);font-size:var(--ts-xs)">${i+1}</td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:100%" id="edit-q-text" value="${(q.question||'').replace(/"/g, '&quot;')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-A" value="${(q.options&&q.options.A||'').replace(/"/g, '&quot;')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-B" value="${(q.options&&q.options.B||'').replace(/"/g, '&quot;')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-C" value="${(q.options&&q.options.C||'').replace(/"/g, '&quot;')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-D" value="${(q.options&&q.options.D||'').replace(/"/g, '&quot;')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:40px;padding:2px" id="edit-q-ans" value="${q.correct||''}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-sec" value="${q.section||''}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-diff" value="${q.difficulty||''}"></td>
+          <td><button class="btn btn-success btn-xs" onclick="Admin.saveQuestion(${i})">Save</button></td>
+        </tr>`;
+      }
+      return `
       <tr>
         <td style="font-family:var(--font-mono);font-size:var(--ts-xs)">${i+1}</td>
         <td style="font-size:var(--ts-xs);max-width:300px;white-space:normal">${q.question.length > 80 ? q.question.slice(0,80)+'…' : q.question}</td>
@@ -305,7 +326,49 @@ window.Admin = (function() {
         <td style="text-align:center"><span class="badge badge-success">${q.correct||'?'}</span></td>
         <td style="font-size:var(--ts-xs)">${q.section||'—'}</td>
         <td style="font-size:var(--ts-xs)">${q.difficulty||'—'}</td>
-      </tr>`).join('');
+        <td><button class="btn btn-ghost btn-xs" onclick="Admin.editQuestion(${i})">Edit</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  let adminChartInstance = null;
+  function renderAdminChart(results) {
+    const ctx = document.getElementById('admin-chart');
+    if (!ctx) return;
+    if (adminChartInstance) adminChartInstance.destroy();
+    if (!results.length) return;
+    
+    // Sort chronological
+    const sorted = [...results].reverse();
+    const labels = sorted.map(r => new Date(r.endTime).toLocaleDateString('en-IN', {minute:'2-digit', hour:'2-digit', day:'numeric', month:'short'}));
+    const data = sorted.map(r => r.accuracy || 0);
+
+    adminChartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Accuracy %',
+          data,
+          borderColor: '#5b5bd6',
+          backgroundColor: 'rgba(91,91,214,0.1)',
+          borderWidth: 3,
+          pointBackgroundColor: '#f59e0b',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ba3c2' } },
+          x: { grid: { display: false }, ticks: { color: '#9ba3c2' } }
+        }
+      }
+    });
   }
 
   function loadResultsPanel() {
@@ -313,8 +376,10 @@ window.Admin = (function() {
     const tbody   = document.getElementById('results-body');
     if (!results.length) {
       tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:var(--sp-8);color:var(--c-text-tertiary)">No exam results saved yet.</td></tr>`;
+      renderAdminChart([]);
       return;
     }
+    renderAdminChart(results);
     tbody.innerHTML = results.map((r, i) => `
       <tr>
         <td style="font-size:var(--ts-xs);font-family:var(--font-mono)">${r.endTime ? new Date(r.endTime).toLocaleString('en-IN') : '—'}</td>
@@ -325,6 +390,7 @@ window.Admin = (function() {
         <td style="font-size:var(--ts-sm);font-family:var(--font-mono)">${formatTime(r.timeTaken || 0)}</td>
         <td><span class="badge badge-${r.grade==='A+'||r.grade==='A'?'success':r.grade==='F'?'danger':'info'}">${r.grade || '—'}</span></td>
         <td>
+          <button class="btn btn-ghost btn-xs" onclick="Admin.exportResultCSV(${i})" title="Export CSV" style="padding:0 var(--sp-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
           <button class="btn btn-ghost btn-xs" onclick="Admin.viewResult(${i})">View</button>
           <button class="btn btn-danger btn-xs" onclick="Admin.deleteResult(${i})">Del</button>
         </td>
@@ -385,6 +451,30 @@ window.Admin = (function() {
       renderQTable(filtered);
     },
 
+    editQuestion: function(idx) {
+      window._editingQIdx = idx;
+      renderQTable(allQuestions);
+    },
+
+    saveQuestion: function(idx) {
+      const q = allQuestions[idx];
+      if(!q) return;
+      q.question = document.getElementById('edit-q-text').value;
+      if(!q.options) q.options = {};
+      q.options.A = document.getElementById('edit-q-A').value;
+      q.options.B = document.getElementById('edit-q-B').value;
+      q.options.C = document.getElementById('edit-q-C').value;
+      q.options.D = document.getElementById('edit-q-D').value;
+      q.correct   = document.getElementById('edit-q-ans').value.toUpperCase();
+      q.section   = document.getElementById('edit-q-sec').value;
+      q.difficulty= document.getElementById('edit-q-diff').value;
+      
+      window._editingQIdx = undefined;
+      Store.setQuestions(allQuestions);
+      renderQTable(allQuestions);
+      toast('Question updated successfully', 'success');
+    },
+
     clearQuestions: function() {
       if (!confirm('Clear all loaded questions?')) return;
       Store.clearQuestions();
@@ -438,6 +528,33 @@ window.Admin = (function() {
       if (!results[idx]) return;
       Store.saveResult(results[idx]);
       window.location.href = 'result.html';
+    },
+
+    exportResultCSV: function(idx) {
+      const results = Store.getAllResults ? Store.getAllResults() : [];
+      const res = results[idx];
+      if (!res) return;
+      
+      let csv = 'Question ID,Question,Section,Selected Option,Correct Option,Status,Time Taken (s)\\n';
+      const qTimes = res.qTimes || {};
+      const answers = res.answers || {};
+      const questions = res.questions || [];
+      
+      questions.forEach(q => {
+        const uAns = answers[q.id] || '';
+        const cAns = q.correct || '';
+        const status = !uAns ? 'Unanswered' : (uAns === cAns ? 'Correct' : 'Incorrect');
+        const qt = qTimes[q.id] || 0;
+        const qSafe = '"' + (q.question?q.question.replace(/"/g, '""'):'') + '"';
+        csv += `${q.id},${qSafe},${q.section||''},${uAns},${cAns},${status},${qt}\\n`;
+      });
+      
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `result_${res.candidateName||'candidate'}_${new Date().getTime()}.csv`;
+      a.click();
+      toast('CSV downloaded!', 'success');
     },
 
     deleteResult: function(idx) {

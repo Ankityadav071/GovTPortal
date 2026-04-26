@@ -14,10 +14,23 @@
 <body>
 <nav class="navbar" id="main-nav">
   <a href="index.html" class="navbar__logo">
-    <div class="navbar__logo-mark">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    <div class="navbar__logo-mark custom-logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 2.666a1.333 1.333 0 0 0-1.886 0l-10 10A1.333 1.333 0 0 0 5.056 14h21.888a1.333 1.333 0 0 0 .943-2.276l-10-10C17.433 1.272 16.566 1.272 16 2.666z" fill="url(#grad-top)"/>
+        <path d="M5.333 16A1.333 1.333 0 0 0 4 17.333v9.334A2.667 2.667 0 0 0 6.666 29.33h18.667A2.667 2.667 0 0 0 28 26.666v-9.333A1.333 1.333 0 0 0 26.667 16H5.333zm11.334 6.667a2.667 2.667 0 1 1 0-5.334 2.667 2.667 0 0 1 0 5.334z" fill="url(#grad-bottom)"/>
+        <defs>
+          <linearGradient id="grad-top" x1="16" y1="2" x2="16" y2="14" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#7c7ce8"/>
+            <stop offset="1" stop-color="#5b5bd6"/>
+          </linearGradient>
+          <linearGradient id="grad-bottom" x1="16" y1="16" x2="16" y2="29" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f59e0b"/>
+            <stop offset="1" stop-color="#fbbf24"/>
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
-    <span class="navbar__brand">Govt<span>Portal</span></span>
+    <span class="navbar__brand">Govt<span class="brand-accent">Portal</span></span>
   </a>
   <nav class="navbar__links">
     <a href="index.html" class="navbar__link">Home</a>

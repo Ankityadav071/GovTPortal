@@ -159,3 +159,26 @@ window.SAMPLE_PAPERS = [
     ],
   },
 ];
+
+// Dynamically generate 2023 and 2022 variants for UI grouping demonstration
+(function() {
+  const additionalPapers = [];
+  window.SAMPLE_PAPERS.forEach(p => {
+    if(p.year === 2024) {
+      let p23 = JSON.parse(JSON.stringify(p));
+      p23.id = p.id.replace('2024', '2023');
+      p23.title = p.title.replace('2024', '2023');
+      p23.year = 2023;
+      p23.difficulty = p.difficulty === 'Hard' ? 'Medium' : 'Hard';
+      
+      let p22 = JSON.parse(JSON.stringify(p));
+      p22.id = p.id.replace('2024', '2022');
+      p22.title = p.title.replace('2024', '2022');
+      p22.year = 2022;
+      p22.difficulty = 'Easy';
+      
+      additionalPapers.push(p23, p22);
+    }
+  });
+  window.SAMPLE_PAPERS.push(...additionalPapers);
+})();

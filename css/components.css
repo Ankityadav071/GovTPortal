@@ -37,13 +37,31 @@
   display: flex; align-items: center; justify-content: center;
   padding: 5px;
 }
+.navbar__logo-mark.custom-logo {
+  background: transparent;
+  padding: 0;
+  width: 32px; height: 32px;
+  filter: drop-shadow(0 0 10px rgba(91,91,214,0.4));
+  transition: filter var(--t-base), transform var(--t-base);
+}
+.navbar__logo:hover .custom-logo {
+  filter: drop-shadow(0 0 16px rgba(91,91,214,0.6));
+  transform: scale(1.05);
+}
+
 .navbar__brand {
-  font-size: var(--ts-lg);
-  font-weight: 900;
+  font-family: var(--font-heading);
+  font-size: var(--ts-xl);
+  font-weight: 800;
   color: var(--c-text-primary);
   letter-spacing: -0.02em;
 }
-.navbar__brand span { color: var(--c-primary); }
+.navbar__brand .brand-accent { 
+  background: linear-gradient(135deg, var(--c-primary-light), var(--c-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 .navbar__links {
   display: flex;

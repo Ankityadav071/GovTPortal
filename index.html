@@ -7,7 +7,7 @@
 <meta name="description" content="India's best self-exam preparation platform. Practice UPSC, SSC, Railway & Banking exams with real CBT interface, anti-cheat, analytics and AI-powered question generation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/landing.css">
@@ -16,10 +16,23 @@
 <!-- NAVBAR -->
 <nav class="navbar" id="main-nav">
   <a href="index.html" class="navbar__logo">
-    <div class="navbar__logo-mark">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    <div class="navbar__logo-mark custom-logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 2.666a1.333 1.333 0 0 0-1.886 0l-10 10A1.333 1.333 0 0 0 5.056 14h21.888a1.333 1.333 0 0 0 .943-2.276l-10-10C17.433 1.272 16.566 1.272 16 2.666z" fill="url(#grad-top)"/>
+        <path d="M5.333 16A1.333 1.333 0 0 0 4 17.333v9.334A2.667 2.667 0 0 0 6.666 29.33h18.667A2.667 2.667 0 0 0 28 26.666v-9.333A1.333 1.333 0 0 0 26.667 16H5.333zm11.334 6.667a2.667 2.667 0 1 1 0-5.334 2.667 2.667 0 0 1 0 5.334z" fill="url(#grad-bottom)"/>
+        <defs>
+          <linearGradient id="grad-top" x1="16" y1="2" x2="16" y2="14" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#7c7ce8"/>
+            <stop offset="1" stop-color="#5b5bd6"/>
+          </linearGradient>
+          <linearGradient id="grad-bottom" x1="16" y1="16" x2="16" y2="29" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f59e0b"/>
+            <stop offset="1" stop-color="#fbbf24"/>
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
-    <span class="navbar__brand">Govt<span>Portal</span></span>
+    <span class="navbar__brand">Govt<span class="brand-accent">Portal</span></span>
   </a>
   <nav class="navbar__links">
     <a href="index.html" class="navbar__link active">Home</a>
@@ -348,7 +361,31 @@
   const pg = document.getElementById('papers-grid');
   function renderPapers(cat) {
     const papers = cat === 'all' ? SAMPLE_PAPERS : SAMPLE_PAPERS.filter(p => p.category === cat);
-    pg.innerHTML = papers.map(p => `
+    if (!papers.length) {
+      pg.innerHTML = `<div style="text-align:center; padding:var(--sp-10); color:var(--c-text-secondary); grid-column:1/-1;">No papers available for this category.</div>`;
+      return;
+    }
+
+    const groups = {};
+    papers.forEach(p => {
+      const year = p.year || 'Legacy';
+      if (!groups[year]) groups[year] = [];
+      groups[year].push(p);
+    });
+
+    const sortedYears = Object.keys(groups).sort((a, b) => b === 'Legacy' ? -1 : a === 'Legacy' ? 1 : b - a);
+
+    let html = '';
+    sortedYears.forEach(year => {
+      // Inline styling for the Year Header Row
+      html += `<div style="grid-column: 1 / -1; margin-top: var(--sp-6); margin-bottom: var(--sp-2);">
+                 <h2 style="font-family: var(--font-heading); font-size: var(--ts-xl); color: var(--c-text-primary); border-bottom: 2px solid var(--c-border); padding-bottom: 8px;">
+                   ${year} Papers
+                 </h2>
+               </div>`;
+      
+      // Render cards for this year
+      html += groups[year].map(p => `
       <div class="paper-card" style="--paper-color:${p.color}" onclick="startPaper('${p.id}')">
         <div class="paper-card__category">${p.category} — ${p.subcategory}</div>
         <div class="paper-card__title">${p.title}</div>
@@ -371,6 +408,9 @@
         </div>
         <button class="btn btn-primary btn-sm" style="margin-top:var(--sp-2)">Start Exam →</button>
       </div>`).join('');
+    });
+
+    pg.innerHTML = html;
   }
   renderPapers('all');
 
