@@ -294,3 +294,21 @@ body { padding-top: var(--nav-h); }
   .onboarding-step:nth-child(even) .onboarding-step__visual { order: unset; }
   .onboarding-hero__title { font-size: var(--ts-4xl); }
 }
+
+@media (max-width: 480px) {
+  .setup-page, .lobby-page, .onboarding-page { padding-top: var(--sp-8); }
+  .setup-container, .lobby-container, .onboarding-container { padding: 0 var(--sp-4); }
+  .setup-header__title { font-size: var(--ts-3xl); }
+  .format-box__tabs { flex-wrap: wrap; }
+  .format-tab-btn { flex: 1; min-width: 88px; text-align: center; padding: var(--sp-3) var(--sp-2); }
+  .prompt-actions .btn, .prompt-actions { width: 100%; }
+  .prompt-actions { flex-direction: column; }
+  .parsed-preview__stat-row { gap: var(--sp-4); flex-wrap: wrap; }
+  .lobby-title, .onboarding-hero__title { font-size: var(--ts-3xl); }
+  .onboarding-hero__desc { font-size: var(--ts-md); }
+  .onboarding-cta { padding: var(--sp-10) var(--sp-4); }
+  .onboarding-cta__title { font-size: var(--ts-2xl); }
+  .onboarding-cta__actions { flex-direction: column; }
+  .onboarding-cta__actions .btn { width: 100%; }
+  .lobby-begin-btn { padding: var(--sp-4); font-size: var(--ts-md); }
+}

@@ -15,12 +15,17 @@
   <div class="exam-nav__brand">Govt<span style="color:var(--c-primary)">Portal</span></div>
   <div class="exam-nav__title" id="exam-nav-title">Loading...</div>
   <div class="exam-nav__actions">
-    <button class="btn btn-secondary btn-sm" id="calc-toggle-btn" style="display:none" onclick="toggleCalculator()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
-      Calculator
+    <button class="btn btn-secondary btn-sm" id="palette-toggle-btn" onclick="togglePalette()" aria-label="Question palette">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Questions</span>
     </button>
-    <button class="btn btn-danger btn-sm" onclick="openSubmitModal()">
-      Submit Exam
+    <button class="btn btn-secondary btn-sm" id="calc-toggle-btn" style="display:none" onclick="toggleCalculator()" aria-label="Calculator">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>
+      <span>Calculator</span>
+    </button>
+    <button class="btn btn-danger btn-sm" onclick="openSubmitModal()" aria-label="Submit exam">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span>Submit Exam</span>
     </button>
   </div>
 </div>
@@ -86,6 +91,9 @@
 
   <!-- RIGHT: SIDEBAR -->
   <div class="exam-sidebar">
+    <button class="exam-sidebar__close" id="palette-close-btn" onclick="togglePalette(false)" aria-label="Close question palette">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
     <!-- Candidate strip -->
     <div class="cand-strip">
       <div class="cand-strip__avatar" id="cand-avatar">A</div>
@@ -134,6 +142,7 @@
     </div>
   </div>
 </div>
+<div class="exam-sidebar-overlay" id="exam-sidebar-overlay" onclick="togglePalette(false)"></div>
 
 <!-- SUBMIT MODAL -->
 <div class="modal-backdrop hidden" id="submit-modal">

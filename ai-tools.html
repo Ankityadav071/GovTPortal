@@ -18,14 +18,18 @@
     </div>
     <span class="navbar__brand">Govt<span>Portal</span></span>
   </a>
-  <nav class="navbar__links">
+  <nav class="navbar__links" id="main-nav-links">
     <a href="index.html" class="navbar__link">Home</a>
     <a href="ai-tools.html" class="navbar__link active">AI Tools</a>
   </nav>
   <div class="navbar__actions">
     <a href="exam-setup.html" class="btn btn-primary btn-sm">Start Exam</a>
   </div>
+  <button class="navbar__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav-links">
+    <span class="navbar__toggle-bar"></span>
+  </button>
 </nav>
+<div class="navbar__overlay" id="nav-overlay"></div>
 
 <main style="padding-top:var(--nav-h);min-height:100vh;padding-bottom:var(--sp-16)">
   <div class="container" style="max-width:1000px">
@@ -143,7 +147,7 @@
     <!-- Format Templates -->
     <div style="margin-bottom:var(--sp-8)">
       <h2 style="font-size:var(--ts-2xl);font-weight:800;margin-bottom:var(--sp-6)">Expected Output Format</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5)">
+      <div class="grid-2-col" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5)">
         <div class="code-box">
           <div class="code-box__header">
             <span class="code-box__title">CSV Format</span>
@@ -192,7 +196,7 @@
     <!-- Tips -->
     <div class="card" style="padding:var(--sp-6);border-color:var(--c-primary-soft)">
       <h3 style="font-size:var(--ts-lg);font-weight:700;margin-bottom:var(--sp-5)">💡 Tips for Best Results</h3>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4)">
+      <div class="grid-2-col" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4)">
         <div class="rec-item"><div class="rec-item__icon">📌</div><div>Paste <strong>clear, well-structured text</strong> — NCERT chapters, newspaper summaries, handwritten notes work best.</div></div>
         <div class="rec-item"><div class="rec-item__icon">🔢</div><div>Request <strong>30–50 questions</strong> per prompt for quality. Running multiple prompts is better than 100 in one go.</div></div>
         <div class="rec-item"><div class="rec-item__icon">✅</div><div>Always <strong>double-check the correct answers</strong> before uploading. AI can occasionally make factual errors.</div></div>

@@ -18,14 +18,18 @@
     </div>
     <span class="navbar__brand">Govt<span>Portal</span></span>
   </a>
-  <nav class="navbar__links">
+  <nav class="navbar__links" id="main-nav-links">
     <a href="index.html" class="navbar__link">Home</a>
     <a href="ai-tools.html" class="navbar__link">AI Tools</a>
   </nav>
   <div class="navbar__actions">
     <a href="exam-setup.html" class="btn btn-primary btn-sm">New Exam →</a>
   </div>
+  <button class="navbar__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav-links">
+    <span class="navbar__toggle-bar"></span>
+  </button>
 </nav>
+<div class="navbar__overlay" id="nav-overlay"></div>
 
 <main class="result-page">
   <div class="result-container">

@@ -71,6 +71,16 @@
   }
   window.toggleCalculator = () => Calculator.toggle();
 
+  // Mobile question-palette drawer
+  window.togglePalette = function(forceState) {
+    const sidebar = document.querySelector('.exam-sidebar');
+    const overlay = document.getElementById('exam-sidebar-overlay');
+    if (!sidebar) return;
+    const open = typeof forceState === 'boolean' ? forceState : !sidebar.classList.contains('open');
+    sidebar.classList.toggle('open', open);
+    if (overlay) overlay.classList.toggle('open', open);
+  };
+
   // Anti-cheat
   if (cfg.antiCheat) {
     AntiCheat.init({
@@ -214,6 +224,7 @@
     renderQuestion(currentQ, dir);
     const body = document.querySelector('.q-pane__body');
     if (body) body.scrollTop = 0;
+    if (window.innerWidth <= 768) togglePalette(false);
   };
 
   window.toggleMark = function() {

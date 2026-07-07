@@ -193,7 +193,18 @@ body { display: flex; flex-direction: column; }
   flex-direction: column;
   overflow: hidden;
   background: var(--c-bg-surface);
+  position: relative;
 }
+.exam-sidebar__close { display: none; }
+#palette-toggle-btn { display: none; }
+.exam-sidebar-overlay {
+  position: fixed; inset: 0;
+  background: rgba(5,6,10,0.65);
+  z-index: 149;
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--t-base);
+}
+.exam-sidebar-overlay.open { opacity: 1; pointer-events: auto; }
 
 /* Candidate strip */
 .cand-strip {
@@ -421,9 +432,83 @@ body { display: flex; flex-direction: column; }
   .calc-wrap { right: 300px; }
 }
 @media (max-width: 768px) {
-  .exam-layout { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
-  .q-pane { overflow: visible; }
-  .exam-sidebar { max-height: 340px; border-top: 1px solid var(--c-border); border-right: none; }
-  .calc-wrap { right: 16px; width: 260px; }
+  .exam-nav { padding: 0 var(--sp-4); gap: var(--sp-2); }
+  .exam-nav__brand { display: none; }
+  .exam-nav__title { text-align: left; font-size: var(--ts-xs); }
+  .exam-nav__actions .btn { padding: 7px 10px; font-size: var(--ts-xs); }
+  #palette-toggle-btn { display: inline-flex; }
+
+  /* Single column: sidebar becomes a slide-in drawer instead of eating half the screen */
+  .exam-layout { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+  .q-pane { overflow: hidden; border-right: none; }
+
+  .exam-sidebar {
+    position: fixed;
+    top: 52px; right: 0;
+    width: min(88vw, 340px);
+    height: calc(100vh - 52px);
+    height: calc(100dvh - 52px);
+    max-height: none;
+    border-top: none;
+    border-left: 1px solid var(--c-border-strong);
+    transform: translateX(100%);
+    transition: transform var(--t-base) var(--ease-out);
+    z-index: 150;
+    box-shadow: none;
+  }
+  .exam-sidebar.open { transform: translateX(0); box-shadow: var(--shadow-xl); }
+  .exam-sidebar__close {
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; top: var(--sp-3); right: var(--sp-3);
+    width: 30px; height: 30px;
+    background: var(--c-bg-overlay);
+    border: none; border-radius: var(--r-md);
+    color: var(--c-text-secondary);
+    cursor: pointer;
+    z-index: 1;
+  }
+  .exam-sidebar__close:hover { background: var(--c-danger-soft); color: var(--c-danger-light); }
+
+  /* Question header: allow badges to scroll instead of clipping */
+  .q-pane__header { padding: var(--sp-3) var(--sp-4); flex-wrap: wrap; gap: var(--sp-2); }
+  .q-pane__header > div:nth-child(2) { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .q-pane__marks { margin-left: 0; }
+  .q-pane__body { padding: var(--sp-4) var(--sp-5); }
+  .q-text { font-size: var(--ts-md); margin-bottom: var(--sp-5); }
+
+  /* Action bar: two balanced rows instead of one overflowing row */
+  .q-pane__actions {
+    flex-wrap: wrap;
+    padding: var(--sp-3) var(--sp-4);
+    gap: var(--sp-2);
+  }
+  .q-actions-left { flex: 1 1 100%; order: 2; gap: var(--sp-2); }
+  .q-actions-right { flex: 1 1 100%; order: 1; margin-left: 0; }
+  .q-actions-left .btn {
+    flex: 1 1 0; min-width: 0; flex-shrink: 1;
+    padding: 10px 8px; font-size: var(--ts-xs); gap: 4px;
+  }
+  .q-actions-left .btn span,
+  .q-actions-left .btn { text-overflow: ellipsis; }
+  .q-actions-right .btn { width: 100%; }
+
+  .calc-wrap { top: auto; bottom: 16px; right: 16px; left: 16px; width: auto; max-width: 300px; margin: 0 auto; }
   .key-hints { display: none; }
+}
+
+@media (max-width: 480px) {
+  .exam-nav__title { display: none; }
+  .exam-nav__actions .btn span { display: none; }
+  .exam-nav__actions .btn { padding: 8px; width: 34px; height: 34px; }
+  #palette-toggle-btn { position: relative; }
+
+  .q-pane__header { padding: var(--sp-2) var(--sp-3); }
+  .q-pane__num { font-size: var(--ts-xs); }
+  .q-pane__body { padding: var(--sp-3) var(--sp-4); }
+  .q-text { font-size: var(--ts-base); }
+  .q-option { padding: var(--sp-3) var(--sp-4); }
+
+  .exam-sidebar { width: 92vw; }
+  .timer-block { padding: var(--sp-4); }
+  .timer-ring-wrap { width: 56px; height: 56px; }
 }

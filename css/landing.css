@@ -195,3 +195,16 @@
   .features-grid { grid-template-columns: 1fr; }
   .ai-banner { padding: var(--sp-8) var(--sp-5); }
 }
+
+@media (max-width: 480px) {
+  .hero { padding: calc(var(--nav-h) + 20px) 0 var(--sp-10); }
+  .hero__title { font-size: 1.7rem; }
+  .hero__desc { font-size: var(--ts-base); }
+  .hero__actions { flex-direction: column; }
+  .hero__actions .btn { width: 100%; }
+  .hero__stats { gap: var(--sp-4); justify-content: space-between; }
+  .ai-banner { padding: var(--sp-6) var(--sp-4); margin: var(--sp-10) 0; }
+  .ai-banner__actions { flex-direction: column; }
+  .ai-banner__actions .btn { width: 100%; }
+  .ticker-track { animation-duration: 26s; }
+}

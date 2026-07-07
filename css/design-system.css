@@ -98,6 +98,16 @@
   --nav-h: 60px;
 }
 
+/* Compact navbar + tighter spacing on phones */
+@media (max-width: 480px) {
+  :root {
+    --nav-h: 54px;
+    --ts-4xl: 1.85rem;
+    --ts-5xl: 2.15rem;
+    --ts-3xl: 1.55rem;
+  }
+}
+
 /* ── RESET ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

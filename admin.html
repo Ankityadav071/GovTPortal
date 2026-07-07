@@ -18,14 +18,18 @@
     </div>
     <span class="navbar__brand">Govt<span>Portal</span></span>
   </a>
-  <nav class="navbar__links">
+  <nav class="navbar__links" id="main-nav-links">
     <a href="index.html" class="navbar__link">Home</a>
     <a href="admin.html" class="navbar__link active">Admin</a>
   </nav>
   <div class="navbar__actions">
     <button class="btn btn-ghost btn-sm" id="logout-btn" style="display:none" onclick="Admin.logout()">Logout</button>
   </div>
+  <button class="navbar__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav-links">
+    <span class="navbar__toggle-bar"></span>
+  </button>
 </nav>
+<div class="navbar__overlay" id="nav-overlay"></div>
 
 <!-- PIN LOCK SCREEN -->
 <div id="pin-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:var(--nav-h)">
@@ -68,7 +72,7 @@
     </div>
 
     <!-- Stats row -->
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4);margin-bottom:var(--sp-8)" id="admin-stats-row">
+    <div class="stats-row-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4);margin-bottom:var(--sp-8)" id="admin-stats-row">
       <div class="result-stat-card correct"><div class="result-stat-card__label">Total Questions</div><div class="result-stat-card__value correct-val" id="as-questions">—</div></div>
       <div class="result-stat-card time"><div class="result-stat-card__label">Exams Saved</div><div class="result-stat-card__value time-val" id="as-results">—</div></div>
       <div class="result-stat-card skipped"><div class="result-stat-card__label">Question Sets</div><div class="result-stat-card__value" id="as-sets">—</div></div>
@@ -87,8 +91,8 @@
     <div class="admin-panel active" id="panel-questions">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3)">
         <h2 style="font-size:var(--ts-xl);font-weight:800">Loaded Questions</h2>
-        <div style="display:flex;gap:var(--sp-3)">
-          <input type="text" class="input" id="q-search" placeholder="Search questions..." style="width:240px" oninput="Admin.searchQuestions()">
+        <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap;width:100%;max-width:420px">
+          <input type="text" class="input" id="q-search" placeholder="Search questions..." style="flex:1;min-width:140px" oninput="Admin.searchQuestions()">
           <button class="btn btn-danger btn-sm" onclick="Admin.clearQuestions()">Clear</button>
         </div>
       </div>
@@ -109,7 +113,7 @@
       <h2 style="font-size:var(--ts-xl);font-weight:800;margin-bottom:var(--sp-2)">Upload a Question Paper</h2>
       <p style="color:var(--c-text-secondary);margin-bottom:var(--sp-6)">Upload a new question set and save it as a named paper in the platform library.</p>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5);margin-bottom:var(--sp-6)">
+      <div class="grid-2-col" style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-5);margin-bottom:var(--sp-6)">
         <div class="form-group">
           <label class="form-label">Paper Title</label>
           <input type="text" class="input" id="upload-title" placeholder="e.g. UPSC Prelims Mock 2025">

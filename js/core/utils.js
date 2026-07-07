@@ -92,6 +92,34 @@ window.initNavbarScroll = function() {
   handler();
 };
 
+// ── Mobile Nav Drawer ────────────────────────────────────────────────────────
+window.initMobileNav = function() {
+  const toggle = document.getElementById('nav-toggle');
+  const links  = document.getElementById('main-nav-links');
+  const overlay = document.getElementById('nav-overlay');
+  if (!toggle || !links) return;
+
+  const setOpen = (open) => {
+    toggle.classList.toggle('open', open);
+    links.classList.toggle('open', open);
+    if (overlay) overlay.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+
+  toggle.addEventListener('click', () => setOpen(!links.classList.contains('open')));
+  if (overlay) overlay.addEventListener('click', () => setOpen(false));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+  // Close drawer if resized back to desktop width
+  window.addEventListener('resize', () => { if (window.innerWidth > 768) setOpen(false); });
+};
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMobileNav);
+} else {
+  initMobileNav();
+}
+
 // ── Reveal on Scroll ─────────────────────────────────────────────────────────
 window.initReveal = function() {
   const els = document.querySelectorAll('.reveal, .stagger');

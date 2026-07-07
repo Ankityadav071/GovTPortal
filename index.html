@@ -34,7 +34,7 @@
     </div>
     <span class="navbar__brand">Govt<span class="brand-accent">Portal</span></span>
   </a>
-  <nav class="navbar__links">
+  <nav class="navbar__links" id="main-nav-links">
     <a href="index.html" class="navbar__link active">Home</a>
     <a href="onboarding.html" class="navbar__link">How it Works</a>
     <a href="ai-tools.html" class="navbar__link">AI Tools</a>
@@ -43,10 +43,14 @@
   <div class="navbar__actions">
     <a href="exam-setup.html" class="btn btn-primary btn-sm">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      Start Exam
+      <span class="btn-label-full">Start Exam</span>
     </a>
   </div>
+  <button class="navbar__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav-links">
+    <span class="navbar__toggle-bar"></span>
+  </button>
 </nav>
+<div class="navbar__overlay" id="nav-overlay"></div>
 
 <!-- TICKER -->
 <div class="ticker-wrap" style="margin-top: var(--nav-h);">
