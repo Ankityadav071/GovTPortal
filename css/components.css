@@ -11,6 +11,8 @@
   display: flex;
   align-items: center;
   padding: 0 var(--sp-6);
+  padding-left: max(var(--sp-6), env(safe-area-inset-left));
+  padding-right: max(var(--sp-6), env(safe-area-inset-right));
   gap: var(--sp-6);
   background: rgba(13,15,20,0.85);
   backdrop-filter: blur(14px);
@@ -790,6 +792,8 @@
     align-items: stretch;
     gap: 2px;
     padding: var(--sp-4);
+    padding-right: calc(var(--sp-4) + env(safe-area-inset-right));
+    padding-bottom: calc(var(--sp-4) + env(safe-area-inset-bottom));
     transform: translateX(100%);
     transition: transform var(--t-base) var(--ease-out);
     z-index: 99;
@@ -822,7 +826,7 @@
   .q-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .table th, .table td { padding: var(--sp-2) var(--sp-3); font-size: var(--ts-xs); }
 
-  .toast-container { left: var(--sp-4); right: var(--sp-4); bottom: var(--sp-4); }
+  .toast-container { left: var(--sp-4); right: var(--sp-4); bottom: calc(var(--sp-4) + env(safe-area-inset-bottom)); }
   .toast { min-width: 0; max-width: none; width: 100%; }
 
   .modal { max-width: none; margin: 0 var(--sp-2); }

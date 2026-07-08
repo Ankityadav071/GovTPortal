@@ -2,9 +2,9 @@
    GovTPortal v2 — Design System
    Core tokens, resets, utilities, animations
    ============================================================ */
-
-/* ── Google Font ── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
+/* NOTE: Google Fonts are loaded via <link rel="preconnect"> + <link rel="stylesheet">
+   in each page's <head> — do NOT re-import here. A CSS @import blocks parallel
+   downloading and duplicates the font request the HTML already makes. */
 
 /* ── CSS Custom Properties ── */
 :root {
@@ -44,7 +44,7 @@
   /* Text */
   --c-text-primary:   #e8eaf6;
   --c-text-secondary: #9ba3c2;
-  --c-text-tertiary:  #5c6480;
+  --c-text-tertiary:  #838bab; /* was #5c6480 — bumped for WCAG AA contrast (4.5:1+) */
 
   /* Borders */
   --c-border:        rgba(255,255,255,0.07);
@@ -132,6 +132,61 @@ button { font-family: inherit; }
 img, svg { display: block; max-width: 100%; }
 ul, ol { list-style: none; }
 input, textarea, select { font-family: inherit; }
+
+/* ── FOCUS VISIBILITY (keyboard nav) ── */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--c-primary-light);
+  outline-offset: 2px;
+  border-radius: var(--r-xs);
+}
+.btn:focus-visible, .navbar__link:focus-visible, .tab-btn:focus-visible {
+  outline: 2px solid var(--c-primary-light);
+  outline-offset: 2px;
+}
+.input:focus-visible, .textarea:focus-visible, .select:focus-visible {
+  outline: none; /* handled by border/shadow rule in components.css */
+}
+
+/* ── SELECTION ── */
+::selection { background: var(--c-primary); color: #fff; }
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal, .stagger { opacity: 1 !important; transform: none !important; }
+}
+
+/* ── SKIP LINK ── */
+.skip-link {
+  position: fixed;
+  top: -100px; left: var(--sp-4);
+  z-index: 1000;
+  background: var(--c-primary);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: var(--r-md);
+  font-weight: 700;
+  font-size: var(--ts-sm);
+  transition: top var(--t-fast);
+}
+.skip-link:focus { top: var(--sp-4); }
+
+/* ── NOSCRIPT FALLBACK ── */
+.noscript-banner {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--c-bg-base);
+  color: var(--c-text-primary);
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: var(--sp-8);
+}
+.noscript-banner__title { font-size: var(--ts-2xl); font-weight: 800; margin: 0 0 var(--sp-3); }
+.noscript-banner__desc { max-width: 440px; margin: 0 auto; color: var(--c-text-secondary); }
 
 /* ── TYPOGRAPHY ── */
 h1, h2, h3, h4, h5, h6 {
