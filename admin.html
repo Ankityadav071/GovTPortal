@@ -2,15 +2,30 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Admin Panel — GovTPortal</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#0d0f14">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="GovTPortal admin panel for managing questions, papers and platform settings.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/setup.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+<noscript>
+  <div class="noscript-banner">
+    <div>
+      <p class="noscript-banner__title">JavaScript Required</p>
+      <p class="noscript-banner__desc">GovTPortal needs JavaScript enabled to run the exam engine and interactive tools. Please enable JavaScript in your browser settings and reload the page.</p>
+    </div>
+  </div>
+</noscript>
+<a href="#pin-screen" class="skip-link">Skip to content</a>
 <nav class="navbar" id="main-nav">
   <a href="index.html" class="navbar__logo">
     <div class="navbar__logo-mark">
@@ -80,15 +95,15 @@
     </div>
 
     <!-- Tab nav -->
-    <div class="tab-group" style="margin-bottom:var(--sp-6)" id="admin-tabs">
-      <button class="tab-btn active" data-panel="questions" onclick="Admin.showPanel('questions',this)">📋 Questions</button>
-      <button class="tab-btn" data-panel="upload" onclick="Admin.showPanel('upload',this)">⬆️ Upload Paper</button>
-      <button class="tab-btn" data-panel="results" onclick="Admin.showPanel('results',this)">📊 Results History</button>
-      <button class="tab-btn" data-panel="settings" onclick="Admin.showPanel('settings',this)">⚙️ Settings</button>
+    <div class="tab-group" style="margin-bottom:var(--sp-6)" id="admin-tabs" role="tablist" aria-label="Admin sections">
+      <button class="tab-btn active" data-panel="questions" role="tab" aria-selected="true" aria-controls="panel-questions" id="tabbtn-questions" onclick="Admin.showPanel('questions',this)">📋 Questions</button>
+      <button class="tab-btn" data-panel="upload" role="tab" aria-selected="false" aria-controls="panel-upload" id="tabbtn-upload" tabindex="-1" onclick="Admin.showPanel('upload',this)">⬆️ Upload Paper</button>
+      <button class="tab-btn" data-panel="results" role="tab" aria-selected="false" aria-controls="panel-results" id="tabbtn-results" tabindex="-1" onclick="Admin.showPanel('results',this)">📊 Results History</button>
+      <button class="tab-btn" data-panel="settings" role="tab" aria-selected="false" aria-controls="panel-settings" id="tabbtn-settings" tabindex="-1" onclick="Admin.showPanel('settings',this)">⚙️ Settings</button>
     </div>
 
     <!-- PANEL: Questions -->
-    <div class="admin-panel active" id="panel-questions">
+    <div class="admin-panel active" id="panel-questions" role="tabpanel" aria-labelledby="tabbtn-questions">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5);flex-wrap:wrap;gap:var(--sp-3)">
         <h2 style="font-size:var(--ts-xl);font-weight:800">Loaded Questions</h2>
         <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap;width:100%;max-width:420px">
@@ -109,7 +124,7 @@
     </div>
 
     <!-- PANEL: Upload -->
-    <div class="admin-panel" id="panel-upload" style="display:none">
+    <div class="admin-panel" id="panel-upload" style="display:none" role="tabpanel" aria-labelledby="tabbtn-upload">
       <h2 style="font-size:var(--ts-xl);font-weight:800;margin-bottom:var(--sp-2)">Upload a Question Paper</h2>
       <p style="color:var(--c-text-secondary);margin-bottom:var(--sp-6)">Upload a new question set and save it as a named paper in the platform library.</p>
 
@@ -164,7 +179,7 @@
     </div>
 
     <!-- PANEL: Results History -->
-    <div class="admin-panel" id="panel-results" style="display:none">
+    <div class="admin-panel" id="panel-results" style="display:none" role="tabpanel" aria-labelledby="tabbtn-results">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-5)">
         <h2 style="font-size:var(--ts-xl);font-weight:800">Results History</h2>
         <button class="btn btn-danger btn-sm" onclick="Admin.clearResults()">Clear All Results</button>
@@ -188,7 +203,7 @@
     </div>
 
     <!-- PANEL: Settings -->
-    <div class="admin-panel" id="panel-settings" style="display:none">
+    <div class="admin-panel" id="panel-settings" style="display:none" role="tabpanel" aria-labelledby="tabbtn-settings">
       <h2 style="font-size:var(--ts-xl);font-weight:800;margin-bottom:var(--sp-6)">Platform Settings</h2>
 
       <div class="settings-list" style="max-width:600px">
@@ -253,6 +268,7 @@
 <script src="js/core/utils.js"></script>
 <script src="js/features/parser.js"></script>
 <script src="js/data/sample-papers.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 window.Admin = (function() {
   const ADMIN_PIN_KEY = 'GTP_ADMIN_PIN';
@@ -308,28 +324,28 @@ window.Admin = (function() {
         return `
         <tr style="background:var(--c-bg-overlay)">
           <td style="font-family:var(--font-mono);font-size:var(--ts-xs)">${i+1}</td>
-          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:100%" id="edit-q-text" value="${(q.question||'').replace(/"/g, '&quot;')}"></td>
-          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-A" value="${(q.options&&q.options.A||'').replace(/"/g, '&quot;')}"></td>
-          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-B" value="${(q.options&&q.options.B||'').replace(/"/g, '&quot;')}"></td>
-          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-C" value="${(q.options&&q.options.C||'').replace(/"/g, '&quot;')}"></td>
-          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-D" value="${(q.options&&q.options.D||'').replace(/"/g, '&quot;')}"></td>
-          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:40px;padding:2px" id="edit-q-ans" value="${q.correct||''}"></td>
-          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-sec" value="${q.section||''}"></td>
-          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-diff" value="${q.difficulty||''}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:100%" id="edit-q-text" value="${escapeHtml(q.question||'')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-A" value="${escapeHtml(q.options&&q.options.A||'')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-B" value="${escapeHtml(q.options&&q.options.B||'')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-C" value="${escapeHtml(q.options&&q.options.C||'')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-D" value="${escapeHtml(q.options&&q.options.D||'')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:40px;padding:2px" id="edit-q-ans" value="${escapeHtml(q.correct||'')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-sec" value="${escapeHtml(q.section||'')}"></td>
+          <td><input type="text" class="input" style="font-size:var(--ts-xs);width:60px;padding:2px" id="edit-q-diff" value="${escapeHtml(q.difficulty||'')}"></td>
           <td><button class="btn btn-success btn-xs" onclick="Admin.saveQuestion(${i})">Save</button></td>
         </tr>`;
       }
       return `
       <tr>
         <td style="font-family:var(--font-mono);font-size:var(--ts-xs)">${i+1}</td>
-        <td style="font-size:var(--ts-xs);max-width:300px;white-space:normal">${q.question.length > 80 ? q.question.slice(0,80)+'…' : q.question}</td>
-        <td style="font-size:var(--ts-xs)">${(q.options&&q.options.A)||''}</td>
-        <td style="font-size:var(--ts-xs)">${(q.options&&q.options.B)||''}</td>
-        <td style="font-size:var(--ts-xs)">${(q.options&&q.options.C)||''}</td>
-        <td style="font-size:var(--ts-xs)">${(q.options&&q.options.D)||''}</td>
-        <td style="text-align:center"><span class="badge badge-success">${q.correct||'?'}</span></td>
-        <td style="font-size:var(--ts-xs)">${q.section||'—'}</td>
-        <td style="font-size:var(--ts-xs)">${q.difficulty||'—'}</td>
+        <td style="font-size:var(--ts-xs);max-width:300px;white-space:normal">${escapeHtml(q.question.length > 80 ? q.question.slice(0,80)+'…' : q.question)}</td>
+        <td style="font-size:var(--ts-xs)">${escapeHtml((q.options&&q.options.A)||'')}</td>
+        <td style="font-size:var(--ts-xs)">${escapeHtml((q.options&&q.options.B)||'')}</td>
+        <td style="font-size:var(--ts-xs)">${escapeHtml((q.options&&q.options.C)||'')}</td>
+        <td style="font-size:var(--ts-xs)">${escapeHtml((q.options&&q.options.D)||'')}</td>
+        <td style="text-align:center"><span class="badge badge-success">${escapeHtml(q.correct||'?')}</span></td>
+        <td style="font-size:var(--ts-xs)">${escapeHtml(q.section||'—')}</td>
+        <td style="font-size:var(--ts-xs)">${escapeHtml(q.difficulty||'—')}</td>
         <td><button class="btn btn-ghost btn-xs" onclick="Admin.editQuestion(${i})">Edit</button></td>
       </tr>`;
     }).join('');
@@ -387,14 +403,14 @@ window.Admin = (function() {
     tbody.innerHTML = results.map((r, i) => `
       <tr>
         <td style="font-size:var(--ts-xs);font-family:var(--font-mono)">${r.endTime ? new Date(r.endTime).toLocaleString('en-IN') : '—'}</td>
-        <td style="font-size:var(--ts-sm);font-weight:600">${r.examTitle || '—'}</td>
-        <td style="font-size:var(--ts-sm)">${r.candidateName || '—'}</td>
+        <td style="font-size:var(--ts-sm);font-weight:600">${escapeHtml(r.examTitle || '—')}</td>
+        <td style="font-size:var(--ts-sm)">${escapeHtml(r.candidateName || '—')}</td>
         <td style="font-size:var(--ts-sm)">${r.score || 0} / ${r.totalMarks || '—'}</td>
         <td style="font-size:var(--ts-sm)">${r.accuracy || 0}%</td>
         <td style="font-size:var(--ts-sm);font-family:var(--font-mono)">${formatTime(r.timeTaken || 0)}</td>
         <td><span class="badge badge-${r.grade==='A+'||r.grade==='A'?'success':r.grade==='F'?'danger':'info'}">${r.grade || '—'}</span></td>
         <td>
-          <button class="btn btn-ghost btn-xs" onclick="Admin.exportResultCSV(${i})" title="Export CSV" style="padding:0 var(--sp-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+          <button class="btn btn-ghost btn-xs" onclick="Admin.exportResultCSV(${i})" title="Export CSV" aria-label="Export result as CSV" style="padding:0 var(--sp-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
           <button class="btn btn-ghost btn-xs" onclick="Admin.viewResult(${i})">View</button>
           <button class="btn btn-danger btn-xs" onclick="Admin.deleteResult(${i})">Del</button>
         </td>
@@ -444,7 +460,12 @@ window.Admin = (function() {
     showPanel: function(name, btn) {
       document.querySelectorAll('.admin-panel').forEach(p => p.style.display = 'none');
       document.getElementById('panel-' + name).style.display = '';
-      document.querySelectorAll('[data-panel]').forEach(b => b.classList.toggle('active', b.dataset.panel === name));
+      document.querySelectorAll('[data-panel]').forEach(b => {
+        const isActive = b.dataset.panel === name;
+        b.classList.toggle('active', isActive);
+        b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        b.tabIndex = isActive ? 0 : -1;
+      });
       if (name === 'results') loadResultsPanel();
       if (name === 'questions') loadQuestionsPanel();
     },
@@ -538,21 +559,21 @@ window.Admin = (function() {
       const results = Store.getAllResults ? Store.getAllResults() : [];
       const res = results[idx];
       if (!res) return;
-      
-      let csv = 'Question ID,Question,Section,Selected Option,Correct Option,Status,Time Taken (s)\\n';
+
+      let csv = 'Question ID,Question,Section,Selected Option,Correct Option,Status,Time Taken (s)\r\n';
       const qTimes = res.qTimes || {};
       const answers = res.answers || {};
       const questions = res.questions || [];
-      
+
       questions.forEach(q => {
         const uAns = answers[q.id] || '';
         const cAns = q.correct || '';
         const status = !uAns ? 'Unanswered' : (uAns === cAns ? 'Correct' : 'Incorrect');
         const qt = qTimes[q.id] || 0;
-        const qSafe = '"' + (q.question?q.question.replace(/"/g, '""'):'') + '"';
-        csv += `${q.id},${qSafe},${q.section||''},${uAns},${cAns},${status},${qt}\\n`;
+        const row = [q.id, q.question, q.section||'', uAns, cAns, status, qt].map(csvSafeField).join(',');
+        csv += row + '\r\n';
       });
-      
+
       const blob = new Blob([csv], { type: 'text/csv' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);

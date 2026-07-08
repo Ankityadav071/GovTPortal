@@ -2,15 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Exam Setup — GovTPortal</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#0d0f14">
+<meta name="color-scheme" content="dark">
 <meta name="description" content="Upload questions, configure your exam and launch a practice session.">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/setup.css">
 </head>
 <body>
+<noscript>
+  <div class="noscript-banner">
+    <div>
+      <p class="noscript-banner__title">JavaScript Required</p>
+      <p class="noscript-banner__desc">GovTPortal needs JavaScript enabled to run the exam engine and interactive tools. Please enable JavaScript in your browser settings and reload the page.</p>
+    </div>
+  </div>
+</noscript>
 <nav class="navbar">
   <a href="index.html" class="navbar__logo">
     <div class="navbar__logo-mark">
@@ -45,13 +58,13 @@
 
       <!-- Format box with tabs -->
       <div class="format-box">
-        <div class="format-box__tabs">
-          <button class="format-tab-btn active" data-tab="csv">CSV Format</button>
-          <button class="format-tab-btn" data-tab="json">JSON Format</button>
-          <button class="format-tab-btn" data-tab="ai">🤖 AI Prompt</button>
+        <div class="format-box__tabs" role="tablist" aria-label="Question format">
+          <button class="format-tab-btn active" data-tab="csv" role="tab" aria-selected="true" aria-controls="tab-csv" id="tabbtn-csv">CSV Format</button>
+          <button class="format-tab-btn" data-tab="json" role="tab" aria-selected="false" aria-controls="tab-json" id="tabbtn-json" tabindex="-1">JSON Format</button>
+          <button class="format-tab-btn" data-tab="ai" role="tab" aria-selected="false" aria-controls="tab-ai" id="tabbtn-ai" tabindex="-1">🤖 AI Prompt</button>
         </div>
 
-        <div class="format-tab-content active" id="tab-csv">
+        <div class="format-tab-content active" id="tab-csv" role="tabpanel" aria-labelledby="tabbtn-csv">
           <div class="code-box">
             <div class="code-box__header">
               <span class="code-box__title">CSV Template — Copy this format</span>
@@ -61,7 +74,7 @@
           </div>
         </div>
 
-        <div class="format-tab-content" id="tab-json">
+        <div class="format-tab-content" id="tab-json" role="tabpanel" aria-labelledby="tabbtn-json">
           <div class="code-box">
             <div class="code-box__header">
               <span class="code-box__title">JSON Template — Copy this format</span>
@@ -71,7 +84,7 @@
           </div>
         </div>
 
-        <div class="format-tab-content" id="tab-ai">
+        <div class="format-tab-content" id="tab-ai" role="tabpanel" aria-labelledby="tabbtn-ai">
           <div class="prompt-box">
             <p style="font-size:var(--ts-sm);color:var(--c-text-secondary);margin-bottom:var(--sp-3)">Choose a prompt template and copy it to Gemini or ChatGPT:</p>
 
@@ -299,8 +312,14 @@
   // ── Format tabs ──
   document.querySelectorAll('.format-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.format-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.format-tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+        b.tabIndex = -1;
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      btn.tabIndex = 0;
       document.querySelectorAll('.format-tab-content').forEach(c => c.classList.remove('active'));
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
     });

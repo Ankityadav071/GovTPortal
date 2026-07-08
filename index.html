@@ -2,17 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>GovTPortal — Free Exam Prep for UPSC, SSC, Railway & Banking</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#0d0f14">
+<meta name="color-scheme" content="dark">
 <meta name="description" content="India's best self-exam preparation platform. Practice UPSC, SSC, Railway & Banking exams with real CBT interface, anti-cheat, analytics and AI-powered question generation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
+<noscript>
+  <div class="noscript-banner">
+    <div>
+      <p class="noscript-banner__title">JavaScript Required</p>
+      <p class="noscript-banner__desc">GovTPortal needs JavaScript enabled to run the exam engine and interactive tools. Please enable JavaScript in your browser settings and reload the page.</p>
+    </div>
+  </div>
+</noscript>
+<a href="#main-content" class="skip-link">Skip to content</a>
 <!-- NAVBAR -->
 <nav class="navbar" id="main-nav">
   <a href="index.html" class="navbar__logo">
@@ -53,7 +65,7 @@
 <div class="navbar__overlay" id="nav-overlay"></div>
 
 <!-- TICKER -->
-<div class="ticker-wrap" style="margin-top: var(--nav-h);">
+<div id="main-content" class="ticker-wrap" style="margin-top: var(--nav-h);">
   <span class="ticker-label">📢 LIVE</span>
   <div class="ticker-track" id="ticker-track">
     <span class="ticker-item">🔔 UPSC CSE 2025 Notification Released — Apply before May 30</span>

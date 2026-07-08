@@ -2,18 +2,32 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Exam — GovTPortal</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#0d0f14">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Take your practice exam in GovTPortal's real CBT interface with timer, anti-cheat and question palette.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/exam.css">
 </head>
 <body>
+<noscript>
+  <div class="noscript-banner">
+    <div>
+      <p class="noscript-banner__title">JavaScript Required</p>
+      <p class="noscript-banner__desc">GovTPortal needs JavaScript enabled to run the exam engine and interactive tools. Please enable JavaScript in your browser settings and reload the page.</p>
+    </div>
+  </div>
+</noscript>
 <!-- EXAM NAV -->
 <div class="exam-nav">
   <div class="exam-nav__brand">Govt<span style="color:var(--c-primary)">Portal</span></div>
-  <div class="exam-nav__title" id="exam-nav-title">Loading...</div>
+  <h1 class="exam-nav__title" id="exam-nav-title">Loading...</h1>
   <div class="exam-nav__actions">
     <button class="btn btn-secondary btn-sm" id="palette-toggle-btn" onclick="togglePalette()" aria-label="Question palette">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -145,11 +159,11 @@
 <div class="exam-sidebar-overlay" id="exam-sidebar-overlay" onclick="togglePalette(false)"></div>
 
 <!-- SUBMIT MODAL -->
-<div class="modal-backdrop hidden" id="submit-modal">
+<div class="modal-backdrop hidden" id="submit-modal" role="dialog" aria-modal="true" aria-labelledby="submit-modal-title">
   <div class="modal">
     <div class="modal__header">
-      <div class="modal__title">Submit Exam?</div>
-      <button class="modal__close" onclick="closeModal('submit-modal')">✕</button>
+      <div class="modal__title" id="submit-modal-title">Submit Exam?</div>
+      <button class="modal__close" onclick="closeModal('submit-modal')" aria-label="Close dialog">✕</button>
     </div>
     <div class="modal__body">
       <p>Are you sure you want to submit the exam?</p>
@@ -164,9 +178,9 @@
 </div>
 
 <!-- TIME'S UP MODAL -->
-<div class="modal-backdrop hidden" id="times-up-modal">
+<div class="modal-backdrop hidden" id="times-up-modal" role="dialog" aria-modal="true" aria-labelledby="timesup-modal-title">
   <div class="modal">
-    <div class="modal__header"><div class="modal__title">⏰ Time's Up!</div></div>
+    <div class="modal__header"><div class="modal__title" id="timesup-modal-title">⏰ Time's Up!</div></div>
     <div class="modal__body">Your exam has been auto-submitted as time has expired.</div>
     <div class="modal__footer">
       <button class="btn btn-primary" onclick="submitExam()">View Results</button>

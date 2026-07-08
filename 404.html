@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Page Not Found — GovTPortal</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#0d0f14">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
+<link rel="stylesheet" href="css/components.css">
+<style>
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: var(--sp-6); }
+  .error-code {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: clamp(4rem, 18vw, 9rem);
+    line-height: 1;
+    margin-bottom: var(--sp-3);
+  }
+  .error-title { font-size: var(--ts-2xl); font-weight: 800; margin-bottom: var(--sp-3); }
+  .error-desc { color: var(--c-text-secondary); max-width: 440px; margin: 0 auto var(--sp-8); }
+  .error-actions { display: flex; gap: var(--sp-3); justify-content: center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<noscript>
+  <div class="noscript-banner">
+    <div>
+      <p class="noscript-banner__title">JavaScript Required</p>
+      <p class="noscript-banner__desc">GovTPortal needs JavaScript enabled to run the exam engine and interactive tools. Please enable JavaScript in your browser settings and reload the page.</p>
+    </div>
+  </div>
+</noscript>
+<main>
+  <div class="error-code gradient-text" aria-hidden="true">404</div>
+  <h1 class="error-title">This page wandered off syllabus</h1>
+  <p class="error-desc">The page you're looking for doesn't exist or may have moved. Let's get you back to practicing.</p>
+  <div class="error-actions">
+    <a href="index.html" class="btn btn-primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Back to Home
+    </a>
+    <a href="exam-setup.html" class="btn btn-secondary">Start an Exam</a>
+  </div>
+</main>
+</body>
+</html>

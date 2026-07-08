@@ -2,15 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>AI Question Generator — GovTPortal</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#0d0f14">
+<meta name="color-scheme" content="dark">
 <meta name="description" content="Generate UPSC, SSC, Railway and Banking exam questions instantly using Gemini or ChatGPT.">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/setup.css">
 </head>
 <body>
+<noscript>
+  <div class="noscript-banner">
+    <div>
+      <p class="noscript-banner__title">JavaScript Required</p>
+      <p class="noscript-banner__desc">GovTPortal needs JavaScript enabled to run the exam engine and interactive tools. Please enable JavaScript in your browser settings and reload the page.</p>
+    </div>
+  </div>
+</noscript>
+<a href="#main-content" class="skip-link">Skip to content</a>
 <nav class="navbar" id="main-nav">
   <a href="index.html" class="navbar__logo">
     <div class="navbar__logo-mark">
@@ -31,7 +45,7 @@
 </nav>
 <div class="navbar__overlay" id="nav-overlay"></div>
 
-<main style="padding-top:var(--nav-h);min-height:100vh;padding-bottom:var(--sp-16)">
+<main id="main-content" style="padding-top:var(--nav-h);min-height:100vh;padding-bottom:var(--sp-16)">
   <div class="container" style="max-width:1000px">
 
     <!-- Hero -->

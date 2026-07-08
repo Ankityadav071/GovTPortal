@@ -2,15 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Results — GovTPortal</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#0d0f14">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="View your detailed exam results, score analytics, section-wise performance and weak areas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/result.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
+<noscript>
+  <div class="noscript-banner">
+    <div>
+      <p class="noscript-banner__title">JavaScript Required</p>
+      <p class="noscript-banner__desc">GovTPortal needs JavaScript enabled to run the exam engine and interactive tools. Please enable JavaScript in your browser settings and reload the page.</p>
+    </div>
+  </div>
+</noscript>
+<a href="#main-content" class="skip-link">Skip to content</a>
 <nav class="navbar" id="main-nav">
   <a href="index.html" class="navbar__logo">
     <div class="navbar__logo-mark">
@@ -31,7 +45,7 @@
 </nav>
 <div class="navbar__overlay" id="nav-overlay"></div>
 
-<main class="result-page">
+<main id="main-content" class="result-page">
   <div class="result-container">
 
     <!-- Header -->
@@ -206,6 +220,7 @@
 <script src="js/core/utils.js"></script>
 <script src="js/features/analytics.js"></script>
 <script src="js/features/pdf-export.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 window.ResultPage = (function() {
   const result = Store.getResult();
@@ -291,7 +306,7 @@ window.ResultPage = (function() {
     barsEl.innerHTML += `
       <div class="section-bar">
         <div class="section-bar__header">
-          <span class="section-bar__name">${s.name}</span>
+          <span class="section-bar__name">${escapeHtml(s.name)}</span>
           <span class="section-bar__pct ${cls}">${pct}% (${s.correct}/${s.total})</span>
         </div>
         <div class="progress-bar"><div class="progress-bar__fill" style="width:${pct}%;background:${barColor}"></div></div>
@@ -358,9 +373,9 @@ window.ResultPage = (function() {
 
       rows += `<tr>
         <td style="font-family:var(--font-mono);font-size:var(--ts-xs)">${idx+1}</td>
-        <td style="font-size:var(--ts-sm);max-width:360px;white-space:normal">${q.question.length > 90 ? q.question.slice(0,90)+'…' : q.question}</td>
-        <td style="text-align:center"><span class="badge badge-${status === 'correct' ? 'success' : status === 'wrong' ? 'danger' : 'neutral'}">${userAns || '—'}</span></td>
-        <td style="text-align:center"><span class="badge badge-success">${q.correct}</span></td>
+        <td style="font-size:var(--ts-sm);max-width:360px;white-space:normal">${escapeHtml(q.question.length > 90 ? q.question.slice(0,90)+'…' : q.question)}</td>
+        <td style="text-align:center"><span class="badge badge-${status === 'correct' ? 'success' : status === 'wrong' ? 'danger' : 'neutral'}">${escapeHtml(userAns || '—')}</span></td>
+        <td style="text-align:center"><span class="badge badge-success">${escapeHtml(q.correct)}</span></td>
         <td style="font-family:var(--font-mono);font-size:var(--ts-xs);text-align:center">${timeTakenQ}s</td>
         <td style="text-align:center" class="${marksClass}">${marksEarned > 0 ? '+' : ''}${marksEarned}</td>
         <td>
@@ -372,8 +387,8 @@ window.ResultPage = (function() {
       <tr>
         <td colspan="7" style="padding:0;border:none">
           <div class="q-row-explanation" id="exp-${idx}">
-            <strong>Correct Answer:</strong> (${q.correct}) ${q.options[q.correct] || ''}<br>
-            ${q.explanation ? `<strong>Explanation:</strong> ${q.explanation}` : ''}
+            <strong>Correct Answer:</strong> (${escapeHtml(q.correct)}) ${escapeHtml(q.options[q.correct] || '')}<br>
+            ${q.explanation ? `<strong>Explanation:</strong> ${escapeHtml(q.explanation)}` : ''}
           </div>
         </td>
       </tr>`;
@@ -395,7 +410,7 @@ window.ResultPage = (function() {
       grid.innerHTML += `
         <div class="weak-area-card">
           <div class="weak-area-card__top">
-            <div class="weak-area-card__name">${w.section}</div>
+            <div class="weak-area-card__name">${escapeHtml(w.section)}</div>
             <div class="weak-area-card__pct">${w.pct}%</div>
           </div>
           <div class="progress-bar"><div class="progress-bar__fill" style="width:${w.pct}%;background:var(--c-danger)"></div></div>
@@ -407,7 +422,7 @@ window.ResultPage = (function() {
   // ── RECOMMENDATIONS ──
   const recList = document.getElementById('rec-list');
   (recommendations || []).forEach(r => {
-    recList.innerHTML += `<div class="rec-item"><div class="rec-item__icon">💡</div><div>${r}</div></div>`;
+    recList.innerHTML += `<div class="rec-item"><div class="rec-item__icon">💡</div><div>${escapeHtml(r)}</div></div>`;
   });
 
   return {
