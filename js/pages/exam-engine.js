@@ -173,7 +173,7 @@
         const sel = ans && ans.value === k;
         return `<div class="q-option ${sel ? 'selected' : ''}" data-key="${k}" onclick="selectOption('${k}')">
           <div class="q-option__key">${k}</div>
-          <div class="q-option__text">${q.options[k]}</div>
+          <div class="q-option__text">${escapeHtml(q.options[k])}</div>
         </div>`;
       }).join('');
 
@@ -252,7 +252,7 @@
     const currentSection = questions[currentQ].section || 'General';
     tabEl.innerHTML = SECTIONS.map((s, i) => {
       const answered = s.indices.filter(idx => Store.getAnswer(idx)).length;
-      return `<button class="tab-btn ${s.name===currentSection?'active':''}" onclick="jumpToSection(${i})">${s.name}<span class="badge badge-neutral" style="margin-left:4px;font-size:9px;padding:1px 6px">${answered}/${s.indices.length}</span></button>`;
+      return `<button class="tab-btn ${s.name===currentSection?'active':''}" onclick="jumpToSection(${i})">${escapeHtml(s.name)}<span class="badge badge-neutral" style="margin-left:4px;font-size:9px;padding:1px 6px">${answered}/${s.indices.length}</span></button>`;
     }).join('');
   }
 
