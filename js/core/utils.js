@@ -3,6 +3,35 @@
  * DOM helpers, time formatting, toast, counters, reveal animations
  */
 
+// ── CSV Field Safety ─────────────────────────────────────────────────────────
+// Neutralizes CSV/"formula injection" (CWE-1236): if an exported field starts
+// with =, +, -, @, or a tab/CR, spreadsheet apps (Excel/Sheets/LibreOffice)
+// treat the cell as a formula when the file is opened. Since exported fields
+// here originate from user-uploaded question content, prefix a stray leading
+// trigger char with a single quote (spreadsheets then show it as plain text)
+// and apply standard CSV quoting/escaping.
+window.csvSafeField = function(value) {
+  let str = (value === null || value === undefined) ? '' : String(value);
+  if (/^[=+\-@\t\r]/.test(str)) str = "'" + str;
+  return '"' + str.replace(/"/g, '""') + '"';
+};
+
+// ── HTML Escaping ────────────────────────────────────────────────────────────
+// Question/option/section text originates from user-uploaded CSV/JSON files
+// and is rendered via innerHTML in several places. Always pass untrusted
+// strings through this before interpolating into an HTML template, or a
+// malicious upload (e.g. an option containing `<img src=x onerror=...>`)
+// becomes a stored-XSS payload against anyone who takes that exam.
+window.escapeHtml = function(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+};
+
 // ── Time Format ─────────────────────────────────────────────────────────────
 window.formatTime = function(seconds) {
   if (!seconds && seconds !== 0) return '—';
@@ -28,6 +57,8 @@ window.toast = function(message, type = 'info', duration = 3000) {
     container = document.createElement('div');
     container.id = 'toast-container';
     container.className = 'toast-container';
+    container.setAttribute('role', 'status');
+    container.setAttribute('aria-live', 'polite');
     document.body.appendChild(container);
   }
 
@@ -142,19 +173,31 @@ if (document.readyState === 'loading') {
 }
 
 // ── Modal Helpers ────────────────────────────────────────────────────────────
+let _lastFocusedEl = null;
 window.openModal = function(id) {
   const el = document.getElementById(id);
-  if (el) el.classList.remove('hidden');
+  if (!el) return;
+  _lastFocusedEl = document.activeElement;
+  el.classList.remove('hidden');
+  const focusable = el.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusable) focusable.focus();
 };
 window.closeModal = function(id) {
   const el = document.getElementById(id);
   if (el) el.classList.add('hidden');
+  if (_lastFocusedEl && typeof _lastFocusedEl.focus === 'function') _lastFocusedEl.focus();
 };
 // Close modal on backdrop click
 document.addEventListener('click', e => {
   if (e.target.classList.contains('modal-backdrop')) {
     e.target.classList.add('hidden');
   }
+});
+// Close the topmost open modal on Escape
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const open = document.querySelectorAll('.modal-backdrop:not(.hidden)');
+  if (open.length) open[open.length - 1].classList.add('hidden');
 });
 
 // ── File Download ────────────────────────────────────────────────────────────
