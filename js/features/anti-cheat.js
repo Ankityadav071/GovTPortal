@@ -17,6 +17,18 @@ window.AntiCheat = (function() {
   // Event handler refs for cleanup
   const _handlers = {};
 
+  // Mobile/touch devices: the Fullscreen API is unsupported or unreliable
+  // (notably iOS Safari has no fullscreen support for arbitrary elements),
+  // and window-blur fires constantly from normal mobile behavior — the
+  // virtual keyboard opening, browser chrome, notification shade, app
+  // switches. Enforcing fullscreen and blur-based violations there produces
+  // false positives that repeatedly pause the timer, effectively freezing
+  // it. Tab-switch detection (visibilitychange) is comparatively reliable
+  // and stays enabled everywhere.
+  function _isMobile() {
+    return window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+  }
+
   // Blocked keys during exam
   const BLOCKED_KEYS = new Set([
     'F12','F5',
@@ -55,6 +67,7 @@ window.AntiCheat = (function() {
       if (!_enabled) return;
       _onViolation  = onViolation;
       _onAutoSubmit = onAutoSubmit;
+      const mobile = _isMobile();
 
       // ── Visibility change (tab switch) ──
       _handlers.visChange = () => {
@@ -65,21 +78,25 @@ window.AntiCheat = (function() {
       };
       document.addEventListener('visibilitychange', _handlers.visChange);
 
-      // ── Window blur (switched app/tab) ──
-      _handlers.blur = () => {
-        if (_paused || _calcOpen) return;
-        _triggerViolation('Window focus lost! Stay on the exam at all times.');
-      };
-      window.addEventListener('blur', _handlers.blur);
+      // ── Window blur (switched app/tab) — desktop only, see _isMobile() note ──
+      if (!mobile) {
+        _handlers.blur = () => {
+          if (_paused || _calcOpen) return;
+          _triggerViolation('Window focus lost! Stay on the exam at all times.');
+        };
+        window.addEventListener('blur', _handlers.blur);
+      }
 
-      // ── Fullscreen exit ──
-      _handlers.fsChange = () => {
-        if (_paused || _calcOpen) return;
-        if (!document.fullscreenElement) {
-          _triggerViolation('Fullscreen exited! Please stay in fullscreen during the exam.');
-        }
-      };
-      document.addEventListener('fullscreenchange', _handlers.fsChange);
+      // ── Fullscreen exit — desktop only, see _isMobile() note ──
+      if (!mobile) {
+        _handlers.fsChange = () => {
+          if (_paused || _calcOpen) return;
+          if (!document.fullscreenElement) {
+            _triggerViolation('Fullscreen exited! Please stay in fullscreen during the exam.');
+          }
+        };
+        document.addEventListener('fullscreenchange', _handlers.fsChange);
+      }
 
       // ── Keyboard blocking ──
       _handlers.keydown = (e) => {
@@ -121,6 +138,9 @@ window.AntiCheat = (function() {
     },
 
     exitFullscreen() {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement) {
+        return Promise.resolve();
+      }
       if (document.exitFullscreen)           return document.exitFullscreen();
       if (document.webkitExitFullscreen)     return document.webkitExitFullscreen();
       if (document.mozCancelFullScreen)      return document.mozCancelFullScreen();
