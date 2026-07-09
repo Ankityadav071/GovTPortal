@@ -271,3 +271,64 @@ canvas.result-chart { width: 100% !important; max-height: 220px; }
   .q-table-header { flex-direction: column; align-items: stretch; }
   .weak-areas-grid { grid-template-columns: 1fr; }
 }
+
+/* ── EXAM-STYLE REVIEW CARDS ──────────────────────────────────
+   Ported from exam.css's .q-option component (not linked directly —
+   exam.css sets global html/body overflow:hidden for its fixed-viewport
+   CBT layout, which would break this page's normal scrolling). */
+.review-toggle { display: inline-flex; gap: 2px; background: var(--c-bg-overlay); border-radius: var(--r-md); padding: 3px; }
+.review-toggle button { padding: 7px 14px; border-radius: var(--r-sm); font-size: var(--ts-xs); font-weight: 700; color: var(--c-text-secondary); background: transparent; border: none; cursor: pointer; transition: background var(--t-fast), color var(--t-fast); }
+.review-toggle button.active { background: var(--c-primary); color: #fff; }
+
+.review-cards { display: flex; flex-direction: column; gap: var(--sp-5); }
+.review-card { background: var(--c-bg-surface); border: 1px solid var(--c-border); border-radius: var(--r-lg); padding: var(--sp-6); }
+.review-card__header { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-3); margin-bottom: var(--sp-5); }
+.review-card__num { font-family: var(--font-mono); font-weight: 800; color: var(--c-text-tertiary); font-size: var(--ts-sm); }
+.review-card__marks { margin-left: auto; font-family: var(--font-mono); font-size: var(--ts-sm); font-weight: 700; }
+
+.review-card .q-text { font-size: var(--ts-lg); font-weight: 500; line-height: 1.65; color: var(--c-text-primary); margin-bottom: var(--sp-6); }
+.review-card .q-options { display: flex; flex-direction: column; gap: var(--sp-3); }
+.review-card .q-option {
+  display: flex; align-items: flex-start; gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--r-lg);
+  border: 2px solid var(--c-border);
+  cursor: default; /* read-only in review mode */
+  position: relative;
+}
+.review-card .q-option.selected { border-color: var(--c-primary); background: var(--c-primary-soft); }
+.review-card .q-option.correct  { border-color: var(--c-success); background: var(--c-success-soft); }
+.review-card .q-option.wrong    { border-color: var(--c-danger);  background: var(--c-danger-soft); }
+.review-card .q-option__key {
+  width: 30px; height: 30px; border-radius: var(--r-sm);
+  background: var(--c-bg-overlay);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--ts-sm); font-weight: 800; color: var(--c-text-secondary);
+  flex-shrink: 0; font-family: var(--font-mono);
+}
+.review-card .q-option.selected .q-option__key { background: var(--c-primary); color: #fff; }
+.review-card .q-option.correct  .q-option__key { background: var(--c-success); color: #fff; }
+.review-card .q-option.wrong    .q-option__key { background: var(--c-danger);  color: #fff; }
+.review-card .q-option__text { flex: 1; font-size: var(--ts-base); line-height: 1.55; color: var(--c-text-primary); }
+.review-card .q-option__tag { font-size: var(--ts-xs); font-weight: 700; margin-left: auto; padding: 2px 8px; border-radius: var(--r-sm); flex-shrink: 0; }
+.review-card .q-option.selected .q-option__tag { background: var(--c-primary); color: #fff; }
+.review-card .q-option.correct  .q-option__tag { background: var(--c-success); color: #fff; }
+.review-card .q-option.wrong    .q-option__tag { background: var(--c-danger);  color: #fff; }
+
+.review-card__explanation {
+  margin-top: var(--sp-5);
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--c-bg-overlay);
+  border-left: 3px solid var(--c-primary);
+  border-radius: var(--r-md);
+  font-size: var(--ts-sm);
+  line-height: 1.6;
+  color: var(--c-text-secondary);
+}
+.review-card__explanation strong { color: var(--c-text-primary); }
+
+@media (max-width: 480px) {
+  .review-card { padding: var(--sp-4); }
+  .review-card .q-text { font-size: var(--ts-md); margin-bottom: var(--sp-4); }
+  .review-card .q-option { padding: var(--sp-3) var(--sp-4); gap: var(--sp-3); }
+}
