@@ -6,6 +6,10 @@
   const cfg       = Store.getConfig();
   const questions = Store.getQuestions();
 
+  // Matches AntiCheat's internal check — the Fullscreen API is unsupported
+  // or unreliable on touch devices, so don't bother requesting it there.
+  const isMobileDevice = () => window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
+
   if (!questions.length) {
     window.location.href = 'exam-lobby.html';
     return;
@@ -43,6 +47,7 @@
   const timerRingTime = document.getElementById('timer-ring-time');
   const timerRingFill = document.getElementById('timer-ring-fill');
   const timerInfo     = document.getElementById('timer-info');
+  const navTimer      = document.getElementById('exam-nav-timer');
   const markLabel     = document.getElementById('mark-label');
   const candAvatar    = document.getElementById('cand-avatar');
   const candName      = document.getElementById('cand-name');
@@ -81,7 +86,7 @@
     if (overlay) overlay.classList.toggle('open', open);
   };
 
-  // Anti-cheat
+  // Anti-cheat (registration only — actual monitoring starts in activateExamMonitoring())
   if (cfg.antiCheat) {
     AntiCheat.init({
       enabled:        true,
@@ -89,7 +94,10 @@
       tabSwitchWarn:  cfg.tabSwitchWarn,
       violationLimit: cfg.violationLimit || 3,
     });
-    AntiCheat.requestFullscreen().catch(() => {});
+  }
+
+  function activateExamMonitoring() {
+    if (!cfg.antiCheat) return;
     AntiCheat.start({
       onViolation:  showViolation,
       onAutoSubmit: () => {
@@ -114,22 +122,52 @@
       timerDisplay.textContent  = formatted;
       timerRingTime.textContent = formatted;
       timerRingFill.style.strokeDashoffset = CIRC * (1 - remaining / totalSeconds);
+      if (navTimer) navTimer.textContent = formatted;
     },
     onWarn: () => {
       timerDisplay.style.color   = 'var(--c-warn)';
       timerRingFill.style.stroke = 'var(--c-warn)';
       timerRingTime.style.color  = 'var(--c-warn)';
       if (timerInfo) timerInfo.classList.add('warn');
+      if (navTimer) navTimer.classList.add('warn');
     },
     onDanger: () => {
       timerDisplay.style.color   = 'var(--c-danger)';
       timerRingFill.style.stroke = 'var(--c-danger)';
       timerRingTime.style.color  = 'var(--c-danger)';
       if (timerInfo) { timerInfo.classList.remove('warn'); timerInfo.classList.add('danger'); }
+      if (navTimer) { navTimer.classList.remove('warn'); navTimer.classList.add('danger'); }
     },
     onExpire: () => openModal('times-up-modal'),
   });
-  Timer.start();
+  // Show the real starting time immediately rather than the placeholder
+  // dash — otherwise it sits on "—" for the first second until the first tick.
+  const initialFormatted = formatMMSS(totalSeconds);
+  timerDisplay.textContent  = initialFormatted;
+  timerRingTime.textContent = initialFormatted;
+  if (navTimer) navTimer.textContent = initialFormatted;
+
+  function beginTimedExam() {
+    Timer.start();
+    activateExamMonitoring();
+  }
+
+  // requestFullscreen() only succeeds when called from within a real user
+  // gesture — calling it automatically on page load is always silently
+  // rejected by the browser. On desktop, with anti-cheat on, gate the start
+  // behind an explicit click that both requests fullscreen and starts the
+  // timer/monitoring together. Mobile skips fullscreen entirely (see
+  // isMobileDevice()) so there's nothing to gate — start immediately.
+  if (cfg.antiCheat && !isMobileDevice()) {
+    openModal('fullscreen-gate-modal');
+    window.beginFullscreenExam = function() {
+      closeModal('fullscreen-gate-modal');
+      AntiCheat.requestFullscreen().catch(() => {});
+      beginTimedExam();
+    };
+  } else {
+    beginTimedExam();
+  }
 
   // ── PROGRESS BAR ───────────────────────────────────────────
   function updateProgressBar() {
@@ -339,7 +377,7 @@
     Timer.recordQuestion(currentQ);
     Timer.stop();
     AntiCheat.stop          && AntiCheat.stop();
-    AntiCheat.exitFullscreen && AntiCheat.exitFullscreen();
+    AntiCheat.exitFullscreen && AntiCheat.exitFullscreen().catch(() => {});
 
     const endTime = Date.now();
     Store.setSession({ endTime, isSubmitted: true });
@@ -389,7 +427,7 @@
     document.getElementById('violation-overlay').classList.add('hidden');
     Timer.resume   && Timer.resume();
     AntiCheat.resume && AntiCheat.resume();
-    if (cfg.antiCheat) AntiCheat.requestFullscreen().catch(() => {});
+    if (cfg.antiCheat && !isMobileDevice()) AntiCheat.requestFullscreen().catch(() => {});
   };
 
   // ── KEYBOARD SHORTCUTS ─────────────────────────────────────
