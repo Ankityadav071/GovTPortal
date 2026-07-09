@@ -28,6 +28,7 @@
 <div class="exam-nav">
   <div class="exam-nav__brand">Govt<span style="color:var(--c-primary)">Portal</span></div>
   <h1 class="exam-nav__title" id="exam-nav-title">Loading...</h1>
+  <div class="exam-nav__timer" id="exam-nav-timer" aria-label="Time remaining">--:--</div>
   <div class="exam-nav__actions">
     <button class="btn btn-secondary btn-sm" id="palette-toggle-btn" onclick="togglePalette()" aria-label="Question palette">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -184,6 +185,25 @@
     <div class="modal__body">Your exam has been auto-submitted as time has expired.</div>
     <div class="modal__footer">
       <button class="btn btn-primary" onclick="submitExam()">View Results</button>
+    </div>
+  </div>
+</div>
+
+<!-- FULLSCREEN GATE: requestFullscreen() requires a real click/tap to succeed
+     in every modern browser — calling it automatically on page load is always
+     silently rejected. This modal provides that click, then starts the timer
+     and anti-cheat monitoring together, right when the user is actually ready. -->
+<div class="modal-backdrop hidden" id="fullscreen-gate-modal" role="dialog" aria-modal="true" aria-labelledby="fsgate-modal-title">
+  <div class="modal">
+    <div class="modal__header"><div class="modal__title" id="fsgate-modal-title">🔒 Ready to Begin?</div></div>
+    <div class="modal__body">
+      This exam runs in fullscreen with anti-cheat monitoring enabled. The timer starts the moment you click below.
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn-primary" onclick="beginFullscreenExam()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        Enter Fullscreen &amp; Start
+      </button>
     </div>
   </div>
 </div>

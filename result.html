@@ -172,14 +172,20 @@
     <div class="q-table-section">
       <div class="q-table-header">
         <h2 style="font-size:var(--ts-xl);font-weight:800">Question Review</h2>
-        <div class="q-table-filters">
-          <button class="filter-btn active" data-filter="all" onclick="ResultPage.filterTable('all',this)">All</button>
-          <button class="filter-btn" data-filter="correct" onclick="ResultPage.filterTable('correct',this)">✅ Correct</button>
-          <button class="filter-btn" data-filter="wrong" onclick="ResultPage.filterTable('wrong',this)">❌ Wrong</button>
-          <button class="filter-btn" data-filter="skipped" onclick="ResultPage.filterTable('skipped',this)">⬜ Skipped</button>
+        <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap;align-items:center">
+          <div class="q-table-filters">
+            <button class="filter-btn active" data-filter="all" onclick="ResultPage.filterTable('all',this)">All</button>
+            <button class="filter-btn" data-filter="correct" onclick="ResultPage.filterTable('correct',this)">✅ Correct</button>
+            <button class="filter-btn" data-filter="wrong" onclick="ResultPage.filterTable('wrong',this)">❌ Wrong</button>
+            <button class="filter-btn" data-filter="skipped" onclick="ResultPage.filterTable('skipped',this)">⬜ Skipped</button>
+          </div>
+          <div class="review-toggle" role="tablist" aria-label="Review layout">
+            <button class="active" data-view="table" role="tab" aria-selected="true" onclick="ResultPage.setReviewView('table',this)">📋 Table</button>
+            <button data-view="cards" role="tab" aria-selected="false" onclick="ResultPage.setReviewView('cards',this)">📝 Exam View</button>
+          </div>
         </div>
       </div>
-      <div class="q-table-wrap">
+      <div class="q-table-wrap" id="q-table-view">
         <div class="q-table-scroll">
           <table class="table" id="q-review-table">
             <thead>
@@ -197,6 +203,7 @@
           </table>
         </div>
       </div>
+      <div class="review-cards hidden" id="review-cards-view"></div>
     </div>
 
     <!-- Weak Areas -->
@@ -353,6 +360,7 @@ window.ResultPage = (function() {
 
   // ── QUESTION TABLE ──
   let tableFilter = 'all';
+  let currentView = 'table';
   const answers = Store.getAnswers();
   const flags   = Store.getFlags();
 
@@ -397,6 +405,55 @@ window.ResultPage = (function() {
   }
   renderTable('all');
 
+  function renderReviewCards(filter) {
+    const container = document.getElementById('review-cards-view');
+    let html = '';
+    questions.forEach((q, idx) => {
+      const ans = answers[idx];
+      const userAns = ans ? ans.value : null;
+      const isCorrect = userAns === q.correct;
+      const isSkipped = !userAns;
+      const status = isSkipped ? 'skipped' : isCorrect ? 'correct' : 'wrong';
+      if (filter !== 'all' && filter !== status) return;
+
+      const timeTakenQ = (qTimes && qTimes[idx]) || 0;
+      const marksEarned = isSkipped ? 0 : isCorrect ? cfg.marksCorrect : -cfg.marksNegative;
+      const marksClass  = marksEarned > 0 ? 'correct-val' : marksEarned < 0 ? 'wrong-val' : '';
+      const marksLabel  = (marksEarned > 0 ? '+' : '') + marksEarned;
+
+      const optionsHtml = ['A','B','C','D']
+        .filter(k => q.options && q.options[k])
+        .map(k => {
+          const isThisCorrect = k === q.correct;
+          const isThisSelected = k === userAns;
+          let cls = '';
+          let tag = '';
+          if (isThisCorrect) { cls = 'correct'; tag = '<span class="q-option__tag">Correct Answer</span>'; }
+          if (isThisSelected && !isThisCorrect) { cls = 'wrong'; tag = '<span class="q-option__tag">Your Answer</span>'; }
+          else if (isThisSelected && isThisCorrect) { tag = '<span class="q-option__tag">Your Answer · Correct</span>'; }
+          return `<div class="q-option ${cls}">
+            <div class="q-option__key">${k}</div>
+            <div class="q-option__text">${escapeHtml(q.options[k])}</div>
+            ${tag}
+          </div>`;
+        }).join('');
+
+      html += `<div class="review-card">
+        <div class="review-card__header">
+          <span class="review-card__num">Question ${idx+1}</span>
+          <span class="badge badge-${status === 'correct' ? 'success' : status === 'wrong' ? 'danger' : 'neutral'}">${status === 'correct' ? '✅ Correct' : status === 'wrong' ? '❌ Wrong' : '⬜ Skipped'}</span>
+          <span class="badge badge-neutral">${escapeHtml(q.section || 'General')}</span>
+          <span class="badge badge-neutral" style="font-family:var(--font-mono)">${timeTakenQ}s</span>
+          <span class="review-card__marks ${marksClass}">${marksLabel} marks</span>
+        </div>
+        <div class="q-text">${escapeHtml(q.question)}</div>
+        <div class="q-options">${optionsHtml}</div>
+        ${q.explanation ? `<div class="review-card__explanation"><strong>Explanation:</strong> ${escapeHtml(q.explanation)}</div>` : ''}
+      </div>`;
+    });
+    container.innerHTML = html || `<div style="text-align:center;color:var(--c-text-tertiary);padding:var(--sp-10) 0">No questions in this filter</div>`;
+  }
+
   window.toggleExplanation = function(idx) {
     const el = document.getElementById('exp-' + idx);
     el && el.classList.toggle('open');
@@ -431,6 +488,18 @@ window.ResultPage = (function() {
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn && btn.classList.add('active');
       renderTable(filter);
+      renderReviewCards(filter);
+    },
+    setReviewView: function(view, btn) {
+      currentView = view;
+      document.querySelectorAll('.review-toggle button').forEach(b => {
+        const active = b.dataset.view === view;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      document.getElementById('q-table-view').classList.toggle('hidden', view !== 'table');
+      document.getElementById('review-cards-view').classList.toggle('hidden', view !== 'cards');
+      if (view === 'cards') renderReviewCards(tableFilter);
     },
     exportPDF: function() {
       if (typeof PDFExport !== 'undefined') {
